@@ -19,7 +19,7 @@ appendItem model i =
     in
         case i.note of
             "" -> model
-            _ -> {model | wipIdea = Idea "" 0, ideas = ideas}
+            _ -> {model | wipIdea = Idea "" i.kind 0, ideas = ideas}
 
 editIdea : Model -> Idea -> Model
 editIdea model i =

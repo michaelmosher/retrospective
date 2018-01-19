@@ -1,6 +1,7 @@
 module Retrospective.Model exposing (..)
 
-type alias Idea = { note : String, score : Int }
+type Kind = Start | Stop | Continue
+type alias Idea = { note : String, kind: Kind, score : Int }
 type alias Model = {
     voting : Bool,
     wipIdea : Idea,
@@ -10,11 +11,12 @@ type alias Model = {
 model : Model
 model =
     let dummyData = [
-        Idea "hello" 0,
-        Idea "world" 1
+        Idea "hello" Start 0,
+        Idea "world" Continue 1,
+        Idea "foobar" Stop 0
     ]
     in
-        Model False (Idea "" 0) dummyData
+        Model False (Idea "" Start 0) dummyData
 
 type Msg =
     Typing String

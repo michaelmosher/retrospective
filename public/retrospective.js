@@ -8260,28 +8260,35 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
-var _user$project$Retrospective_Model$Idea = F2(
-	function (a, b) {
-		return {note: a, score: b};
+var _user$project$Retrospective_Model$Idea = F3(
+	function (a, b, c) {
+		return {note: a, kind: b, score: c};
 	});
 var _user$project$Retrospective_Model$Model = F3(
 	function (a, b, c) {
 		return {voting: a, wipIdea: b, ideas: c};
 	});
+var _user$project$Retrospective_Model$Continue = {ctor: 'Continue'};
+var _user$project$Retrospective_Model$Stop = {ctor: 'Stop'};
+var _user$project$Retrospective_Model$Start = {ctor: 'Start'};
 var _user$project$Retrospective_Model$model = function () {
 	var dummyData = {
 		ctor: '::',
-		_0: A2(_user$project$Retrospective_Model$Idea, 'hello', 0),
+		_0: A3(_user$project$Retrospective_Model$Idea, 'hello', _user$project$Retrospective_Model$Start, 0),
 		_1: {
 			ctor: '::',
-			_0: A2(_user$project$Retrospective_Model$Idea, 'world', 1),
-			_1: {ctor: '[]'}
+			_0: A3(_user$project$Retrospective_Model$Idea, 'world', _user$project$Retrospective_Model$Continue, 1),
+			_1: {
+				ctor: '::',
+				_0: A3(_user$project$Retrospective_Model$Idea, 'foobar', _user$project$Retrospective_Model$Stop, 0),
+				_1: {ctor: '[]'}
+			}
 		}
 	};
 	return A3(
 		_user$project$Retrospective_Model$Model,
 		false,
-		A2(_user$project$Retrospective_Model$Idea, '', 0),
+		A3(_user$project$Retrospective_Model$Idea, '', _user$project$Retrospective_Model$Start, 0),
 		dummyData);
 }();
 var _user$project$Retrospective_Model$MinusScore = function (a) {
@@ -8355,7 +8362,7 @@ var _user$project$Retrospective_Update$appendItem = F2(
 			return _elm_lang$core$Native_Utils.update(
 				model,
 				{
-					wipIdea: A2(_user$project$Retrospective_Model$Idea, '', 0),
+					wipIdea: A3(_user$project$Retrospective_Model$Idea, '', i.kind, 0),
 					ideas: ideas
 				});
 		}
@@ -8450,13 +8457,33 @@ var _user$project$Retrospective_View$votableIdea = function (i) {
 		});
 };
 var _user$project$Retrospective_View$editableIdea = function (i) {
+	var bgColor = function () {
+		var _p0 = i.kind;
+		switch (_p0.ctor) {
+			case 'Start':
+				return 'lightgreen';
+			case 'Continue':
+				return 'lightblue';
+			default:
+				return 'pink';
+		}
+	}();
+	var styles = {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'background', _1: bgColor},
+		_1: {ctor: '[]'}
+	};
 	return A2(
 		_elm_lang$html$Html$li,
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html_Events$onClick(
-				_user$project$Retrospective_Model$EditIdea(i)),
-			_1: {ctor: '[]'}
+			_0: _elm_lang$html$Html_Attributes$style(styles),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Events$onClick(
+					_user$project$Retrospective_Model$EditIdea(i)),
+				_1: {ctor: '[]'}
+			}
 		},
 		{
 			ctor: '::',
@@ -8466,8 +8493,8 @@ var _user$project$Retrospective_View$editableIdea = function (i) {
 };
 var _user$project$Retrospective_View$renderIdea = F2(
 	function (voting, i) {
-		var _p0 = voting;
-		if (_p0 === true) {
+		var _p1 = voting;
+		if (_p1 === true) {
 			return _user$project$Retrospective_View$votableIdea(i);
 		} else {
 			return _user$project$Retrospective_View$editableIdea(i);
@@ -8483,6 +8510,42 @@ var _user$project$Retrospective_View$ideaList = F2(
 				_user$project$Retrospective_View$renderIdea(voting),
 				ideas));
 	});
+var _user$project$Retrospective_View$ideaSection = function (model) {
+	var continueIdeas = A2(
+		_elm_lang$core$List$filter,
+		function (i) {
+			return _elm_lang$core$Native_Utils.eq(i.kind, _user$project$Retrospective_Model$Continue);
+		},
+		model.ideas);
+	var stopIdeas = A2(
+		_elm_lang$core$List$filter,
+		function (i) {
+			return _elm_lang$core$Native_Utils.eq(i.kind, _user$project$Retrospective_Model$Stop);
+		},
+		model.ideas);
+	var startIdeas = A2(
+		_elm_lang$core$List$filter,
+		function (i) {
+			return _elm_lang$core$Native_Utils.eq(i.kind, _user$project$Retrospective_Model$Start);
+		},
+		model.ideas);
+	return A2(
+		_elm_lang$html$Html$section,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(_user$project$Retrospective_View$ideaList, startIdeas, model.voting),
+			_1: {
+				ctor: '::',
+				_0: A2(_user$project$Retrospective_View$ideaList, stopIdeas, model.voting),
+				_1: {
+					ctor: '::',
+					_0: A2(_user$project$Retrospective_View$ideaList, continueIdeas, model.voting),
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+};
 var _user$project$Retrospective_View$votingButton = function (voting) {
 	var buttonText = voting ? 'Stop Voting' : 'Start Voting';
 	return A2(
@@ -8502,7 +8565,7 @@ var _user$project$Retrospective_View$ideaBox = function (model) {
 	var wipNote = model.wipIdea.note;
 	var submit = _user$project$Retrospective_Model$AddIdea(model.wipIdea);
 	return A2(
-		_elm_lang$html$Html$div,
+		_elm_lang$html$Html$section,
 		{ctor: '[]'},
 		{
 			ctor: '::',
@@ -8552,7 +8615,7 @@ var _user$project$Retrospective_View$body = function (model) {
 				_0: _user$project$Retrospective_View$votingButton(model.voting),
 				_1: {
 					ctor: '::',
-					_0: A2(_user$project$Retrospective_View$ideaList, model.ideas, model.voting),
+					_0: _user$project$Retrospective_View$ideaSection(model),
 					_1: {ctor: '[]'}
 				}
 			}
