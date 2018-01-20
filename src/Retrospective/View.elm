@@ -31,12 +31,13 @@ ideaBox model =
         wipNote = model.wipIdea.note
         ph = "Ideas to start, stop, or continue"
         resString = String.fromChar (Char.fromCode 9654)
+        borderColor = kindColor model.activeKind
         inputStyles = [
             ("width", "500px"),
             ("height", "4em"),
             ("margin", "auto"),
             ("padding", "5px"),
-            ("border", "solid lightgreen"),
+            ("border", "solid " ++ borderColor),
             ("border-width", "3px")
         ]
         divStyles = [
@@ -65,7 +66,7 @@ ideaTab kind =
             ("flex-grow", "1"),
             ("flex-basis", "0")
         ]
-    in span [style styles] [toString kind |> text]
+    in span [style styles, onClick (Change kind)] [toString kind |> text]
 
 votingButton : Bool -> Html Msg
 votingButton voting =

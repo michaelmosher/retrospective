@@ -4,6 +4,7 @@ type Kind = Start | Stop | Continue
 type alias Idea = { note : String, kind: Kind, score : Int }
 type alias Model = {
     voting : Bool,
+    activeKind : Kind,
     wipIdea : Idea,
     ideas : List(Idea)
 }
@@ -16,10 +17,11 @@ model =
         Idea "foobar" Stop 0
     ]
     in
-        Model False (Idea "" Start 0) dummyData
+        Model False Start (Idea "" Start 0) dummyData
 
 type Msg =
     Typing String
+    | Change Kind
     | AddIdea Idea
     | EditIdea Idea
     | ToggleVoting

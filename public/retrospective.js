@@ -8264,9 +8264,9 @@ var _user$project$Retrospective_Model$Idea = F3(
 	function (a, b, c) {
 		return {note: a, kind: b, score: c};
 	});
-var _user$project$Retrospective_Model$Model = F3(
-	function (a, b, c) {
-		return {voting: a, wipIdea: b, ideas: c};
+var _user$project$Retrospective_Model$Model = F4(
+	function (a, b, c, d) {
+		return {voting: a, activeKind: b, wipIdea: c, ideas: d};
 	});
 var _user$project$Retrospective_Model$Continue = {ctor: 'Continue'};
 var _user$project$Retrospective_Model$Stop = {ctor: 'Stop'};
@@ -8285,9 +8285,10 @@ var _user$project$Retrospective_Model$model = function () {
 			}
 		}
 	};
-	return A3(
+	return A4(
 		_user$project$Retrospective_Model$Model,
 		false,
+		_user$project$Retrospective_Model$Start,
 		A3(_user$project$Retrospective_Model$Idea, '', _user$project$Retrospective_Model$Start, 0),
 		dummyData);
 }();
@@ -8304,6 +8305,9 @@ var _user$project$Retrospective_Model$EditIdea = function (a) {
 var _user$project$Retrospective_Model$AddIdea = function (a) {
 	return {ctor: 'AddIdea', _0: a};
 };
+var _user$project$Retrospective_Model$Change = function (a) {
+	return {ctor: 'Change', _0: a};
+};
 var _user$project$Retrospective_Model$Typing = function (a) {
 	return {ctor: 'Typing', _0: a};
 };
@@ -8313,6 +8317,12 @@ var _user$project$Retrospective_Update$setScore = F2(
 		return _elm_lang$core$Native_Utils.update(
 			idea,
 			{score: n});
+	});
+var _user$project$Retrospective_Update$setKind = F2(
+	function (k, idea) {
+		return _elm_lang$core$Native_Utils.update(
+			idea,
+			{kind: k});
 	});
 var _user$project$Retrospective_Update$setNote = F2(
 	function (n, idea) {
@@ -8376,6 +8386,12 @@ var _user$project$Retrospective_Update$update = F2(
 				return _elm_lang$core$Native_Utils.update(
 					model,
 					{wipIdea: newWIPIdea});
+			case 'Change':
+				var _p2 = _p1._0;
+				var newWIPIdea = A2(_user$project$Retrospective_Update$setKind, _p2, model.wipIdea);
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{activeKind: _p2, wipIdea: newWIPIdea});
 			case 'AddIdea':
 				return A2(_user$project$Retrospective_Update$appendItem, model, _p1._0);
 			case 'EditIdea':
@@ -8594,7 +8610,12 @@ var _user$project$Retrospective_View$ideaTab = function (kind) {
 		{
 			ctor: '::',
 			_0: _elm_lang$html$Html_Attributes$style(styles),
-			_1: {ctor: '[]'}
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Events$onClick(
+					_user$project$Retrospective_Model$Change(kind)),
+				_1: {ctor: '[]'}
+			}
 		},
 		{
 			ctor: '::',
@@ -8629,6 +8650,7 @@ var _user$project$Retrospective_View$ideaBox = function (model) {
 			}
 		}
 	};
+	var borderColor = _user$project$Retrospective_View$kindColor(model.activeKind);
 	var inputStyles = {
 		ctor: '::',
 		_0: {ctor: '_Tuple2', _0: 'width', _1: '500px'},
@@ -8643,7 +8665,11 @@ var _user$project$Retrospective_View$ideaBox = function (model) {
 					_0: {ctor: '_Tuple2', _0: 'padding', _1: '5px'},
 					_1: {
 						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'border', _1: 'solid lightgreen'},
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'border',
+							_1: A2(_elm_lang$core$Basics_ops['++'], 'solid ', borderColor)
+						},
 						_1: {
 							ctor: '::',
 							_0: {ctor: '_Tuple2', _0: 'border-width', _1: '3px'},

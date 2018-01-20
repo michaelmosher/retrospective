@@ -1,12 +1,14 @@
 module Retrospective.Update exposing (update)
 
-import Retrospective.Model exposing (Idea, Model, Msg(..))
+import Retrospective.Model exposing (Idea, Kind, Model, Msg(..))
 
 update : Msg -> Model -> Model
 update msg model =
     case msg of
         Typing s -> let newWIPIdea = model.wipIdea |> setNote s
             in { model | wipIdea = newWIPIdea }
+        Change k -> let newWIPIdea = model.wipIdea |> setKind k
+            in { model | activeKind = k, wipIdea = newWIPIdea}
         AddIdea i -> appendItem model i
         EditIdea i -> editIdea model i
         ToggleVoting -> { model | voting = not model.voting }
@@ -45,6 +47,10 @@ vote adjustment model idea =
 setNote : String -> Idea -> Idea
 setNote n idea =
     { idea | note = n }
+
+setKind : Kind -> Idea -> Idea
+setKind k idea =
+    { idea | kind = k }
 
 setScore : Int -> Idea -> Idea
 setScore n idea =
