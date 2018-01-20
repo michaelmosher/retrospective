@@ -8400,6 +8400,17 @@ var _user$project$Retrospective_View$onEnter = function (msg) {
 		'keydown',
 		A2(_elm_lang$core$Json_Decode$andThen, isEnter, _elm_lang$html$Html_Events$keyCode));
 };
+var _user$project$Retrospective_View$kindColor = function (kind) {
+	var _p0 = kind;
+	switch (_p0.ctor) {
+		case 'Start':
+			return 'lightgreen';
+		case 'Continue':
+			return 'lightblue';
+		default:
+			return 'pink';
+	}
+};
 var _user$project$Retrospective_View$votableIdea = function (i) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -8457,33 +8468,13 @@ var _user$project$Retrospective_View$votableIdea = function (i) {
 		});
 };
 var _user$project$Retrospective_View$editableIdea = function (i) {
-	var bgColor = function () {
-		var _p0 = i.kind;
-		switch (_p0.ctor) {
-			case 'Start':
-				return 'lightgreen';
-			case 'Continue':
-				return 'lightblue';
-			default:
-				return 'pink';
-		}
-	}();
-	var styles = {
-		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'background', _1: bgColor},
-		_1: {ctor: '[]'}
-	};
 	return A2(
 		_elm_lang$html$Html$li,
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$style(styles),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$html$Html_Events$onClick(
-					_user$project$Retrospective_Model$EditIdea(i)),
-				_1: {ctor: '[]'}
-			}
+			_0: _elm_lang$html$Html_Events$onClick(
+				_user$project$Retrospective_Model$EditIdea(i)),
+			_1: {ctor: '[]'}
 		},
 		{
 			ctor: '::',
@@ -8502,17 +8493,7 @@ var _user$project$Retrospective_View$renderIdea = F2(
 	});
 var _user$project$Retrospective_View$ideaList = F3(
 	function (kind, ideas, voting) {
-		var bgColor = function () {
-			var _p2 = kind;
-			switch (_p2.ctor) {
-				case 'Start':
-					return 'lightgreen';
-				case 'Continue':
-					return 'lightblue';
-				default:
-					return 'pink';
-			}
-		}();
+		var bgColor = _user$project$Retrospective_View$kindColor(kind);
 		var styles = {
 			ctor: '::',
 			_0: {ctor: '_Tuple2', _0: 'text-align', _1: 'left'},
@@ -8552,15 +8533,6 @@ var _user$project$Retrospective_View$continueIdeaList = _user$project$Retrospect
 var _user$project$Retrospective_View$stopIdeaList = _user$project$Retrospective_View$ideaList(_user$project$Retrospective_Model$Stop);
 var _user$project$Retrospective_View$startIdeaList = _user$project$Retrospective_View$ideaList(_user$project$Retrospective_Model$Start);
 var _user$project$Retrospective_View$ideaSection = function (model) {
-	var styles = {
-		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'display', _1: 'flex'},
-		_1: {
-			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'flex-direction', _1: 'row'},
-			_1: {ctor: '[]'}
-		}
-	};
 	return A2(
 		_elm_lang$html$Html$section,
 		{
@@ -8602,46 +8574,82 @@ var _user$project$Retrospective_View$votingButton = function (voting) {
 			_1: {ctor: '[]'}
 		});
 };
+var _user$project$Retrospective_View$ideaTab = function (kind) {
+	var bgColor = _user$project$Retrospective_View$kindColor(kind);
+	var styles = {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'background', _1: bgColor},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'flex-grow', _1: '1'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'flex-basis', _1: '0'},
+				_1: {ctor: '[]'}
+			}
+		}
+	};
+	return A2(
+		_elm_lang$html$Html$span,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$style(styles),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(
+				_elm_lang$core$Basics$toString(kind)),
+			_1: {ctor: '[]'}
+		});
+};
 var _user$project$Retrospective_View$ideaBox = function (model) {
 	var divStyles = {
 		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'min-height', _1: '2em'},
+		_0: {ctor: '_Tuple2', _0: 'width', _1: '500px'},
 		_1: {
 			ctor: '::',
 			_0: {ctor: '_Tuple2', _0: 'height', _1: '2em'},
-			_1: {ctor: '[]'}
-		}
-	};
-	var buttonStyles = {
-		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'width', _1: '3em'},
-		_1: {
-			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'height', _1: '100%'},
 			_1: {
 				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: 'margin-left', _1: '-20'},
+				_0: {ctor: '_Tuple2', _0: 'line-height', _1: '2em'},
 				_1: {
 					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'border', _1: 'none'},
-					_1: {ctor: '[]'}
+					_0: {ctor: '_Tuple2', _0: 'margin', _1: 'auto'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'display', _1: 'flex'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'justify-content', _1: 'center'},
+							_1: {ctor: '[]'}
+						}
+					}
 				}
 			}
 		}
 	};
 	var inputStyles = {
 		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'width', _1: '400px'},
+		_0: {ctor: '_Tuple2', _0: 'width', _1: '500px'},
 		_1: {
 			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'height', _1: '100%'},
+			_0: {ctor: '_Tuple2', _0: 'height', _1: '4em'},
 			_1: {
 				ctor: '::',
 				_0: {ctor: '_Tuple2', _0: 'margin', _1: 'auto'},
 				_1: {
 					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'border', _1: 'none'},
-					_1: {ctor: '[]'}
+					_0: {ctor: '_Tuple2', _0: 'padding', _1: '5px'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'border', _1: 'solid lightgreen'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'border-width', _1: '3px'},
+							_1: {ctor: '[]'}
+						}
+					}
 				}
 			}
 		}
@@ -8665,52 +8673,45 @@ var _user$project$Retrospective_View$ideaBox = function (model) {
 				},
 				{
 					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$input,
-						{
+					_0: _user$project$Retrospective_View$ideaTab(_user$project$Retrospective_Model$Start),
+					_1: {
+						ctor: '::',
+						_0: _user$project$Retrospective_View$ideaTab(_user$project$Retrospective_Model$Stop),
+						_1: {
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$style(inputStyles),
+							_0: _user$project$Retrospective_View$ideaTab(_user$project$Retrospective_Model$Continue),
+							_1: {ctor: '[]'}
+						}
+					}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$input,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(inputStyles),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$placeholder(ph),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$placeholder(ph),
+								_0: _elm_lang$html$Html_Attributes$value(wipNote),
 								_1: {
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$value(wipNote),
+									_0: _user$project$Retrospective_View$onEnter(submit),
 									_1: {
 										ctor: '::',
-										_0: _user$project$Retrospective_View$onEnter(submit),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$html$Html_Events$onInput(_user$project$Retrospective_Model$Typing),
-											_1: {ctor: '[]'}
-										}
+										_0: _elm_lang$html$Html_Events$onInput(_user$project$Retrospective_Model$Typing),
+										_1: {ctor: '[]'}
 									}
 								}
 							}
-						},
-						{ctor: '[]'}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$button,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$style(buttonStyles),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onClick(submit),
-									_1: {ctor: '[]'}
-								}
-							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text(resString),
-								_1: {ctor: '[]'}
-							}),
-						_1: {ctor: '[]'}
-					}
-				}),
-			_1: {ctor: '[]'}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {ctor: '[]'}
+			}
 		});
 };
 var _user$project$Retrospective_View$body = function (model) {

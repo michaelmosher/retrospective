@@ -1,7 +1,7 @@
 module Retrospective.View exposing (view)
 
 import Char
-import Html exposing (Html, body, button, div, h1, input, li, section, text, ul)
+import Html exposing (Html, body, button, div, h1, input, li, section, span, text, ul)
 import Html.Attributes exposing (placeholder, style, value)
 import Html.Events exposing (on, onClick, onInput)
 import Json.Decode as Json
@@ -32,28 +32,40 @@ ideaBox model =
         ph = "Ideas to start, stop, or continue"
         resString = String.fromChar (Char.fromCode 9654)
         inputStyles = [
-            ("width", "400px"),
-            ("height", "100%"),
+            ("width", "500px"),
+            ("height", "4em"),
             ("margin", "auto"),
-            ("border", "none")
-        ]
-        buttonStyles = [
-            ("width", "3em"),
-            ("height", "100%"),
-            ("margin-left", "-20"),
-            ("border", "none")
+            ("padding", "5px"),
+            ("border", "solid lightgreen"),
+            ("border-width", "3px")
         ]
         divStyles = [
-            ("min-height", "2em"),
-            ("height", "2em")
+            ("width", "500px"),
+            ("height", "2em"),
+            ("line-height", "2em"),
+            ("margin", "auto"),
+            ("display", "flex"),
+            ("justify-content", "center")
         ]
     in
         section [] [
             div [style divStyles] [
-                input [style inputStyles, placeholder ph, value wipNote, onEnter submit, onInput Typing] [],
-                button [style buttonStyles, onClick submit] [text resString]
-            ]
+                ideaTab Start,
+                ideaTab Stop,
+                ideaTab Continue
+            ],
+            input [style inputStyles, placeholder ph, value wipNote, onEnter submit, onInput Typing] []
         ]
+
+ideaTab : Kind -> Html Msg
+ideaTab kind =
+    let bgColor = kindColor kind
+        styles = [
+            ("background", bgColor),
+            ("flex-grow", "1"),
+            ("flex-basis", "0")
+        ]
+    in span [style styles] [toString kind |> text]
 
 votingButton : Bool -> Html Msg
 votingButton voting =
@@ -64,16 +76,11 @@ votingButton voting =
 
 ideaSection : Model -> Html Msg
 ideaSection model =
-    let styles = [
-            ("display", "flex"),
-            ("flex-direction", "row")
-        ]
-    in
-        section [style [("display", "flex")]] [
-            startIdeaList model.ideas model.voting,
-            stopIdeaList model.ideas model.voting,
-            continueIdeaList model.ideas model.voting
-        ]
+    section [style [("display", "flex")]] [
+        startIdeaList model.ideas model.voting,
+        stopIdeaList model.ideas model.voting,
+        continueIdeaList model.ideas model.voting
+    ]
 
 startIdeaList : List(Idea) -> Bool -> Html Msg
 startIdeaList = ideaList Start
@@ -87,10 +94,7 @@ continueIdeaList = ideaList Continue
 ideaList : Kind -> List(Idea) -> Bool -> Html Msg
 ideaList kind ideas voting =
     let ideas_ = List.filter (\i -> i.kind == kind) ideas
-        bgColor = case kind of
-            Start    -> "lightgreen"
-            Continue -> "lightblue"
-            Stop     -> "pink"
+        bgColor = kindColor kind
         styles = [
             ("text-align", "left"),
             ("background", bgColor),
@@ -107,12 +111,7 @@ renderIdea voting i =
 
 editableIdea : Idea -> Html.Html Msg
 editableIdea i =
-    let bgColor = case i.kind of
-            Start    -> "lightgreen"
-            Continue -> "lightblue"
-            Stop     -> "pink"
-        styles = [("background", bgColor)]
-    in li [style styles, onClick (EditIdea i)] [i.note |> text]
+    li [onClick (EditIdea i)] [i.note |> text]
 
 votableIdea : Idea -> Html.Html Msg
 votableIdea i =
@@ -121,6 +120,13 @@ votableIdea i =
         li [] [i.note ++ " - " ++ toString i.score |> text],
         button [onClick (PlusScore i)] [text "+"]
     ]
+
+kindColor : Kind -> String
+kindColor kind =
+    case kind of
+        Start    -> "lightgreen"
+        Continue -> "lightblue"
+        Stop     -> "pink"
 
 -- borrowed from elm-todomvc
 -- ref: https://github.com/evancz/elm-todomvc/blob/166e5f2afc704629ee6d03de00deac892dfaeed0/Todo.elm#L237-L246
