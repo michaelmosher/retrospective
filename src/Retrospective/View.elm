@@ -1,14 +1,15 @@
 module Retrospective.View exposing (view)
 
-import Html exposing (Html, body, button, div, h1, input, li, ol, section, text)
-import Html.Attributes exposing (style, value)
+import Char
+import Html exposing (Html, body, button, div, h1, input, li, section, text, ul)
+import Html.Attributes exposing (placeholder, style, value)
 import Html.Events exposing (on, onClick, onInput)
 import Json.Decode as Json
 import Retrospective.Model exposing (Idea, Kind(..), Model, Msg(..))
 
 view : Model -> Html Msg
 view model =
-    div [] [
+    div [style [("text-align", "center")]] [
         header,
         body model
     ]
@@ -20,18 +21,38 @@ body : Model -> Html Msg
 body model =
     div [] [
         ideaBox model,
-        votingButton model.voting,
-        ideaSection model
+        ideaSection model,
+        votingButton model.voting
     ]
 
 ideaBox : Model -> Html Msg
 ideaBox model =
     let submit = AddIdea model.wipIdea
         wipNote = model.wipIdea.note
+        ph = "Ideas to start, stop, or continue"
+        resString = String.fromChar (Char.fromCode 9654)
+        inputStyles = [
+            ("width", "400px"),
+            ("height", "100%"),
+            ("margin", "auto"),
+            ("border", "none")
+        ]
+        buttonStyles = [
+            ("width", "3em"),
+            ("height", "100%"),
+            ("margin-left", "-20"),
+            ("border", "none")
+        ]
+        divStyles = [
+            ("min-height", "2em"),
+            ("height", "2em")
+        ]
     in
         section [] [
-            input [value wipNote, onEnter submit, onInput Typing] [],
-            button [onClick submit] [text "Add"]
+            div [style divStyles] [
+                input [style inputStyles, placeholder ph, value wipNote, onEnter submit, onInput Typing] [],
+                button [style buttonStyles, onClick submit] [text resString]
+            ]
         ]
 
 votingButton : Bool -> Html Msg
@@ -43,19 +64,40 @@ votingButton voting =
 
 ideaSection : Model -> Html Msg
 ideaSection model =
-    let startIdeas = List.filter (\i -> i.kind == Start) model.ideas
-        stopIdeas = List.filter (\i -> i.kind == Stop) model.ideas
-        continueIdeas = List.filter(\i -> i.kind == Continue) model.ideas
+    let styles = [
+            ("display", "flex"),
+            ("flex-direction", "row")
+        ]
     in
-        section [] [
-            ideaList startIdeas model.voting,
-            ideaList stopIdeas model.voting,
-            ideaList continueIdeas model.voting
+        section [style [("display", "flex")]] [
+            startIdeaList model.ideas model.voting,
+            stopIdeaList model.ideas model.voting,
+            continueIdeaList model.ideas model.voting
         ]
 
-ideaList : List(Idea) -> Bool -> Html Msg
-ideaList ideas voting =
-    ideas |> List.map (renderIdea voting) |> ol []
+startIdeaList : List(Idea) -> Bool -> Html Msg
+startIdeaList = ideaList Start
+
+stopIdeaList : List(Idea) -> Bool -> Html Msg
+stopIdeaList = ideaList Stop
+
+continueIdeaList : List(Idea) -> Bool -> Html Msg
+continueIdeaList = ideaList Continue
+
+ideaList : Kind -> List(Idea) -> Bool -> Html Msg
+ideaList kind ideas voting =
+    let ideas_ = List.filter (\i -> i.kind == kind) ideas
+        bgColor = case kind of
+            Start    -> "lightgreen"
+            Continue -> "lightblue"
+            Stop     -> "pink"
+        styles = [
+            ("text-align", "left"),
+            ("background", bgColor),
+            ("width", "33%"),
+            ("min-height", "3em")
+        ]
+    in ideas_ |> List.map (renderIdea voting) |> ul [style styles]
 
 renderIdea : Bool -> Idea -> Html.Html Msg
 renderIdea voting i =
