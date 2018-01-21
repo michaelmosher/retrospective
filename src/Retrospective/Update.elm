@@ -12,8 +12,9 @@ update msg model =
         Step s -> { model | stage = s }
         AddIdea i -> appendItem model i
         EditIdea i -> editIdea model i
-        PlusScore i -> plusScore model i
-        MinusScore i -> minusScore model i
+        Upvote i -> upvoteIdea model i
+        Downvote i -> downvoteIdea model i
+        _ -> model
 
 appendItem : Model -> Idea -> Model
 appendItem model i =
@@ -21,7 +22,7 @@ appendItem model i =
     in
         case i.note of
             "" -> model
-            _ -> {model | wipIdea = Idea "" i.kind 0, ideas = ideas}
+            _ -> {model | wipIdea = Idea "" i.kind 0 0, ideas = ideas}
 
 editIdea : Model -> Idea -> Model
 editIdea model i =
@@ -29,29 +30,36 @@ editIdea model i =
     in
         { model | wipIdea = i, activeKind = i.kind, ideas = ideas }
 
-plusScore : Model -> Idea -> Model
-plusScore = vote 1
+upvoteIdea : Model -> Idea -> Model
+upvoteIdea model idea =
+    let ideas = modifyIdea upvote model.ideas idea
+    in case model.votesRemaining of
+        0 -> model
+        _ -> { model | ideas = ideas, votesRemaining = model.votesRemaining - 1}
 
-minusScore : Model -> Idea -> Model
-minusScore = vote -1
+downvoteIdea : Model -> Idea -> Model
+downvoteIdea model idea =
+    let ideas = modifyIdea downvote model.ideas idea
+    in { model | ideas = ideas, votesRemaining = model.votesRemaining + 1}
 
-vote : Int -> Model -> Idea -> Model
-vote adjustment model idea =
-    let lambda i = if i == idea
-            then i |> setScore (idea.score + adjustment)
+modifyIdea : (Idea -> Idea) -> List(Idea) -> Idea -> List(Idea)
+modifyIdea modFn ideas idea =
+    let lambda i = if idea == i
+            then modFn i
             else i
-        ideas = List.map lambda model.ideas
-    in
-        { model | ideas = ideas }
+    in List.map lambda ideas
 
 setNote : String -> Idea -> Idea
-setNote n idea =
-    { idea | note = n }
+setNote n i = { i | note = n }
 
 setKind : Kind -> Idea -> Idea
-setKind k idea =
-    { idea | kind = k }
+setKind k i = { i | kind = k }
+
+upvote : Idea -> Idea
+upvote i = { i | votes = i.votes + 1}
+
+downvote : Idea -> Idea
+downvote i = { i | votes = i.votes - 1}
 
 setScore : Int -> Idea -> Idea
-setScore n idea =
-    { idea | score = n }
+setScore n i = { i | totalScore = n }
