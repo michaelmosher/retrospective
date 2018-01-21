@@ -1,7 +1,7 @@
 module Retrospective.Model exposing (..)
 
 type Kind = Start | Stop | Continue
-type Stage = Listing | Voting
+type Stage = Beginning | JiraReview | Listing | Voting | Report
 type alias Idea = { note : String, kind: Kind, score : Int }
 type alias Model = {
     stage : Stage,
