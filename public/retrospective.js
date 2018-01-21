@@ -8266,28 +8266,50 @@ var _user$project$Retrospective_Model$Idea = F3(
 	});
 var _user$project$Retrospective_Model$Model = F4(
 	function (a, b, c, d) {
-		return {voting: a, activeKind: b, wipIdea: c, ideas: d};
+		return {stage: a, activeKind: b, wipIdea: c, ideas: d};
 	});
 var _user$project$Retrospective_Model$Continue = {ctor: 'Continue'};
 var _user$project$Retrospective_Model$Stop = {ctor: 'Stop'};
 var _user$project$Retrospective_Model$Start = {ctor: 'Start'};
+var _user$project$Retrospective_Model$Voting = {ctor: 'Voting'};
+var _user$project$Retrospective_Model$Listing = {ctor: 'Listing'};
 var _user$project$Retrospective_Model$model = function () {
 	var dummyData = {
 		ctor: '::',
-		_0: A3(_user$project$Retrospective_Model$Idea, 'hello', _user$project$Retrospective_Model$Start, 0),
+		_0: A3(_user$project$Retrospective_Model$Idea, 'Defer “unknowns” and features no one can explain to us.', _user$project$Retrospective_Model$Start, 5),
 		_1: {
 			ctor: '::',
-			_0: A3(_user$project$Retrospective_Model$Idea, 'world', _user$project$Retrospective_Model$Continue, 1),
+			_0: A3(_user$project$Retrospective_Model$Idea, 'Have a postmortem to discuss tech choices.', _user$project$Retrospective_Model$Start, 1),
 			_1: {
 				ctor: '::',
-				_0: A3(_user$project$Retrospective_Model$Idea, 'foobar', _user$project$Retrospective_Model$Stop, 0),
-				_1: {ctor: '[]'}
+				_0: A3(_user$project$Retrospective_Model$Idea, 'Define app UI style guide', _user$project$Retrospective_Model$Start, 0),
+				_1: {
+					ctor: '::',
+					_0: A3(_user$project$Retrospective_Model$Idea, 'Look into On-Premise monitoring', _user$project$Retrospective_Model$Start, 1),
+					_1: {
+						ctor: '::',
+						_0: A3(_user$project$Retrospective_Model$Idea, 'Meeting Overload', _user$project$Retrospective_Model$Stop, 2),
+						_1: {
+							ctor: '::',
+							_0: A3(_user$project$Retrospective_Model$Idea, 'Fun new projects, and variety', _user$project$Retrospective_Model$Continue, 1),
+							_1: {
+								ctor: '::',
+								_0: A3(_user$project$Retrospective_Model$Idea, 'Learn Akka/Play Stack', _user$project$Retrospective_Model$Continue, 1),
+								_1: {
+									ctor: '::',
+									_0: A3(_user$project$Retrospective_Model$Idea, 'Test on various browsers', _user$project$Retrospective_Model$Continue, 1),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	};
 	return A4(
 		_user$project$Retrospective_Model$Model,
-		false,
+		_user$project$Retrospective_Model$Listing,
 		_user$project$Retrospective_Model$Start,
 		A3(_user$project$Retrospective_Model$Idea, '', _user$project$Retrospective_Model$Start, 0),
 		dummyData);
@@ -8298,12 +8320,14 @@ var _user$project$Retrospective_Model$MinusScore = function (a) {
 var _user$project$Retrospective_Model$PlusScore = function (a) {
 	return {ctor: 'PlusScore', _0: a};
 };
-var _user$project$Retrospective_Model$ToggleVoting = {ctor: 'ToggleVoting'};
 var _user$project$Retrospective_Model$EditIdea = function (a) {
 	return {ctor: 'EditIdea', _0: a};
 };
 var _user$project$Retrospective_Model$AddIdea = function (a) {
 	return {ctor: 'AddIdea', _0: a};
+};
+var _user$project$Retrospective_Model$Step = function (a) {
+	return {ctor: 'Step', _0: a};
 };
 var _user$project$Retrospective_Model$Change = function (a) {
 	return {ctor: 'Change', _0: a};
@@ -8392,14 +8416,14 @@ var _user$project$Retrospective_Update$update = F2(
 				return _elm_lang$core$Native_Utils.update(
 					model,
 					{activeKind: _p2, wipIdea: newWIPIdea});
+			case 'Step':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{stage: _p1._0});
 			case 'AddIdea':
 				return A2(_user$project$Retrospective_Update$appendItem, model, _p1._0);
 			case 'EditIdea':
 				return A2(_user$project$Retrospective_Update$editIdea, model, _p1._0);
-			case 'ToggleVoting':
-				return _elm_lang$core$Native_Utils.update(
-					model,
-					{voting: !model.voting});
 			case 'PlusScore':
 				return A2(_user$project$Retrospective_Update$plusScore, model, _p1._0);
 			default:
@@ -8407,7 +8431,7 @@ var _user$project$Retrospective_Update$update = F2(
 		}
 	});
 
-var _user$project$Retrospective_View$onEnter = function (msg) {
+var _user$project$Retrospective_Views_Listing$onEnter = function (msg) {
 	var isEnter = function (code) {
 		return _elm_lang$core$Native_Utils.eq(code, 13) ? _elm_lang$core$Json_Decode$succeed(msg) : _elm_lang$core$Json_Decode$fail('not ENTER');
 	};
@@ -8416,7 +8440,7 @@ var _user$project$Retrospective_View$onEnter = function (msg) {
 		'keydown',
 		A2(_elm_lang$core$Json_Decode$andThen, isEnter, _elm_lang$html$Html_Events$keyCode));
 };
-var _user$project$Retrospective_View$kindColor = function (kind) {
+var _user$project$Retrospective_Views_Listing$kindColor = function (kind) {
 	var _p0 = kind;
 	switch (_p0.ctor) {
 		case 'Start':
@@ -8427,63 +8451,7 @@ var _user$project$Retrospective_View$kindColor = function (kind) {
 			return 'pink';
 	}
 };
-var _user$project$Retrospective_View$votableIdea = function (i) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{ctor: '[]'},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$button,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Events$onClick(
-						_user$project$Retrospective_Model$MinusScore(i)),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('-'),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$li,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text(
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								i.note,
-								A2(
-									_elm_lang$core$Basics_ops['++'],
-									' - ',
-									_elm_lang$core$Basics$toString(i.score)))),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$button,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onClick(
-								_user$project$Retrospective_Model$PlusScore(i)),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('+'),
-							_1: {ctor: '[]'}
-						}),
-					_1: {ctor: '[]'}
-				}
-			}
-		});
-};
-var _user$project$Retrospective_View$editableIdea = function (i) {
+var _user$project$Retrospective_Views_Listing$renderIdea = function (i) {
 	return A2(
 		_elm_lang$html$Html$li,
 		{
@@ -8498,18 +8466,9 @@ var _user$project$Retrospective_View$editableIdea = function (i) {
 			_1: {ctor: '[]'}
 		});
 };
-var _user$project$Retrospective_View$renderIdea = F2(
-	function (voting, i) {
-		var _p1 = voting;
-		if (_p1 === true) {
-			return _user$project$Retrospective_View$votableIdea(i);
-		} else {
-			return _user$project$Retrospective_View$editableIdea(i);
-		}
-	});
-var _user$project$Retrospective_View$ideaList = F3(
-	function (kind, ideas, voting) {
-		var bgColor = _user$project$Retrospective_View$kindColor(kind);
+var _user$project$Retrospective_Views_Listing$ideaList = F2(
+	function (kind, ideas) {
+		var bgColor = _user$project$Retrospective_Views_Listing$kindColor(kind);
 		var styles = {
 			ctor: '::',
 			_0: {ctor: '_Tuple2', _0: 'text-align', _1: 'left'},
@@ -8518,11 +8477,19 @@ var _user$project$Retrospective_View$ideaList = F3(
 				_0: {ctor: '_Tuple2', _0: 'background', _1: bgColor},
 				_1: {
 					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'width', _1: '33%'},
+					_0: {ctor: '_Tuple2', _0: 'padding-top', _1: '10px'},
 					_1: {
 						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'min-height', _1: '3em'},
-						_1: {ctor: '[]'}
+						_0: {ctor: '_Tuple2', _0: 'padding-bottom', _1: '10px'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'width', _1: '33%'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'min-height', _1: '3em'},
+								_1: {ctor: '[]'}
+							}
+						}
 					}
 				}
 			}
@@ -8540,15 +8507,12 @@ var _user$project$Retrospective_View$ideaList = F3(
 				_0: _elm_lang$html$Html_Attributes$style(styles),
 				_1: {ctor: '[]'}
 			},
-			A2(
-				_elm_lang$core$List$map,
-				_user$project$Retrospective_View$renderIdea(voting),
-				ideas_));
+			A2(_elm_lang$core$List$map, _user$project$Retrospective_Views_Listing$renderIdea, ideas_));
 	});
-var _user$project$Retrospective_View$continueIdeaList = _user$project$Retrospective_View$ideaList(_user$project$Retrospective_Model$Continue);
-var _user$project$Retrospective_View$stopIdeaList = _user$project$Retrospective_View$ideaList(_user$project$Retrospective_Model$Stop);
-var _user$project$Retrospective_View$startIdeaList = _user$project$Retrospective_View$ideaList(_user$project$Retrospective_Model$Start);
-var _user$project$Retrospective_View$ideaSection = function (model) {
+var _user$project$Retrospective_Views_Listing$continueIdeaList = _user$project$Retrospective_Views_Listing$ideaList(_user$project$Retrospective_Model$Continue);
+var _user$project$Retrospective_Views_Listing$stopIdeaList = _user$project$Retrospective_Views_Listing$ideaList(_user$project$Retrospective_Model$Stop);
+var _user$project$Retrospective_Views_Listing$startIdeaList = _user$project$Retrospective_Views_Listing$ideaList(_user$project$Retrospective_Model$Start);
+var _user$project$Retrospective_Views_Listing$ideaSection = function (model) {
 	return A2(
 		_elm_lang$html$Html$section,
 		{
@@ -8563,35 +8527,33 @@ var _user$project$Retrospective_View$ideaSection = function (model) {
 		},
 		{
 			ctor: '::',
-			_0: A2(_user$project$Retrospective_View$startIdeaList, model.ideas, model.voting),
+			_0: _user$project$Retrospective_Views_Listing$startIdeaList(model.ideas),
 			_1: {
 				ctor: '::',
-				_0: A2(_user$project$Retrospective_View$stopIdeaList, model.ideas, model.voting),
+				_0: _user$project$Retrospective_Views_Listing$stopIdeaList(model.ideas),
 				_1: {
 					ctor: '::',
-					_0: A2(_user$project$Retrospective_View$continueIdeaList, model.ideas, model.voting),
+					_0: _user$project$Retrospective_Views_Listing$continueIdeaList(model.ideas),
 					_1: {ctor: '[]'}
 				}
 			}
 		});
 };
-var _user$project$Retrospective_View$votingButton = function (voting) {
-	var buttonText = voting ? 'Stop Voting' : 'Start Voting';
-	return A2(
-		_elm_lang$html$Html$button,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Events$onClick(_user$project$Retrospective_Model$ToggleVoting),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text(buttonText),
-			_1: {ctor: '[]'}
-		});
-};
-var _user$project$Retrospective_View$ideaTab = function (kind) {
-	var bgColor = _user$project$Retrospective_View$kindColor(kind);
+var _user$project$Retrospective_Views_Listing$votingButton = A2(
+	_elm_lang$html$Html$button,
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html_Events$onClick(
+			_user$project$Retrospective_Model$Step(_user$project$Retrospective_Model$Voting)),
+		_1: {ctor: '[]'}
+	},
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html$text('Start Voting'),
+		_1: {ctor: '[]'}
+	});
+var _user$project$Retrospective_Views_Listing$ideaTab = function (kind) {
+	var bgColor = _user$project$Retrospective_Views_Listing$kindColor(kind);
 	var styles = {
 		ctor: '::',
 		_0: {ctor: '_Tuple2', _0: 'background', _1: bgColor},
@@ -8624,10 +8586,10 @@ var _user$project$Retrospective_View$ideaTab = function (kind) {
 			_1: {ctor: '[]'}
 		});
 };
-var _user$project$Retrospective_View$ideaBox = function (model) {
+var _user$project$Retrospective_Views_Listing$ideaBox = function (model) {
 	var divStyles = {
 		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'width', _1: '500px'},
+		_0: {ctor: '_Tuple2', _0: 'width', _1: '600px'},
 		_1: {
 			ctor: '::',
 			_0: {ctor: '_Tuple2', _0: 'height', _1: '2em'},
@@ -8650,10 +8612,10 @@ var _user$project$Retrospective_View$ideaBox = function (model) {
 			}
 		}
 	};
-	var borderColor = _user$project$Retrospective_View$kindColor(model.activeKind);
+	var borderColor = _user$project$Retrospective_Views_Listing$kindColor(model.activeKind);
 	var inputStyles = {
 		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'width', _1: '500px'},
+		_0: {ctor: '_Tuple2', _0: 'width', _1: '600px'},
 		_1: {
 			ctor: '::',
 			_0: {ctor: '_Tuple2', _0: 'height', _1: '4em'},
@@ -8665,23 +8627,25 @@ var _user$project$Retrospective_View$ideaBox = function (model) {
 					_0: {ctor: '_Tuple2', _0: 'padding', _1: '5px'},
 					_1: {
 						ctor: '::',
-						_0: {
-							ctor: '_Tuple2',
-							_0: 'border',
-							_1: A2(_elm_lang$core$Basics_ops['++'], 'solid ', borderColor)
-						},
+						_0: {ctor: '_Tuple2', _0: 'border-width', _1: '5px'},
 						_1: {
 							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'border-width', _1: '3px'},
-							_1: {ctor: '[]'}
+							_0: {ctor: '_Tuple2', _0: 'border-style', _1: 'solid'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'border-color', _1: borderColor},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'font-size', _1: '1em'},
+									_1: {ctor: '[]'}
+								}
+							}
 						}
 					}
 				}
 			}
 		}
 	};
-	var resString = _elm_lang$core$String$fromChar(
-		_elm_lang$core$Char$fromCode(9654));
 	var ph = 'Ideas to start, stop, or continue';
 	var wipNote = model.wipIdea.note;
 	var submit = _user$project$Retrospective_Model$AddIdea(model.wipIdea);
@@ -8699,13 +8663,13 @@ var _user$project$Retrospective_View$ideaBox = function (model) {
 				},
 				{
 					ctor: '::',
-					_0: _user$project$Retrospective_View$ideaTab(_user$project$Retrospective_Model$Start),
+					_0: _user$project$Retrospective_Views_Listing$ideaTab(_user$project$Retrospective_Model$Start),
 					_1: {
 						ctor: '::',
-						_0: _user$project$Retrospective_View$ideaTab(_user$project$Retrospective_Model$Stop),
+						_0: _user$project$Retrospective_Views_Listing$ideaTab(_user$project$Retrospective_Model$Stop),
 						_1: {
 							ctor: '::',
-							_0: _user$project$Retrospective_View$ideaTab(_user$project$Retrospective_Model$Continue),
+							_0: _user$project$Retrospective_Views_Listing$ideaTab(_user$project$Retrospective_Model$Continue),
 							_1: {ctor: '[]'}
 						}
 					}
@@ -8725,7 +8689,7 @@ var _user$project$Retrospective_View$ideaBox = function (model) {
 								_0: _elm_lang$html$Html_Attributes$value(wipNote),
 								_1: {
 									ctor: '::',
-									_0: _user$project$Retrospective_View$onEnter(submit),
+									_0: _user$project$Retrospective_Views_Listing$onEnter(submit),
 									_1: {
 										ctor: '::',
 										_0: _elm_lang$html$Html_Events$onInput(_user$project$Retrospective_Model$Typing),
@@ -8740,23 +8704,28 @@ var _user$project$Retrospective_View$ideaBox = function (model) {
 			}
 		});
 };
-var _user$project$Retrospective_View$body = function (model) {
+var _user$project$Retrospective_Views_Listing$listing = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
 		{ctor: '[]'},
 		{
 			ctor: '::',
-			_0: _user$project$Retrospective_View$ideaBox(model),
+			_0: _user$project$Retrospective_Views_Listing$ideaBox(model),
 			_1: {
 				ctor: '::',
-				_0: _user$project$Retrospective_View$ideaSection(model),
+				_0: _user$project$Retrospective_Views_Listing$ideaSection(model),
 				_1: {
 					ctor: '::',
-					_0: _user$project$Retrospective_View$votingButton(model.voting),
+					_0: _user$project$Retrospective_Views_Listing$votingButton,
 					_1: {ctor: '[]'}
 				}
 			}
 		});
+};
+
+var _user$project$Retrospective_View$body = function (model) {
+	var _p0 = model.stage;
+	return _user$project$Retrospective_Views_Listing$listing(model);
 };
 var _user$project$Retrospective_View$header = A2(
 	_elm_lang$html$Html$h1,

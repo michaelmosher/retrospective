@@ -9,9 +9,9 @@ update msg model =
             in { model | wipIdea = newWIPIdea }
         Change k -> let newWIPIdea = model.wipIdea |> setKind k
             in { model | activeKind = k, wipIdea = newWIPIdea}
+        Step s -> { model | stage = s }
         AddIdea i -> appendItem model i
         EditIdea i -> editIdea model i
-        ToggleVoting -> { model | voting = not model.voting }
         PlusScore i -> plusScore model i
         MinusScore i -> minusScore model i
 
