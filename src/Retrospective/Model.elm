@@ -29,7 +29,7 @@ model =
         Idea "Test on various browsers" Continue 1 0
     ]
     in
-        Model Listing Start (Idea "" Start 0 0) dummyData 3
+        Model JiraReview Start (Idea "" Start 0 0) dummyData 3
 
 type Msg =
     Typing String

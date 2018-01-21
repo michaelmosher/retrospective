@@ -7,9 +7,6 @@ import Html.Styled.Attributes exposing (css, placeholder)
 import Retrospective.Model exposing (..)
 import Retrospective.Views.Shared exposing (ideaSection)
 
--- TODO
--- sort model.ideas
--- bold top results
 view : Model -> Html Msg
 view model =
     let sorted = sortIdeasByScore model.ideas

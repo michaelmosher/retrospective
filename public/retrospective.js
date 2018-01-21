@@ -14199,6 +14199,7 @@ var _user$project$Retrospective_Model$Start = {ctor: 'Start'};
 var _user$project$Retrospective_Model$Report = {ctor: 'Report'};
 var _user$project$Retrospective_Model$Voting = {ctor: 'Voting'};
 var _user$project$Retrospective_Model$Listing = {ctor: 'Listing'};
+var _user$project$Retrospective_Model$JiraReview = {ctor: 'JiraReview'};
 var _user$project$Retrospective_Model$model = function () {
 	var dummyData = {
 		ctor: '::',
@@ -14235,13 +14236,12 @@ var _user$project$Retrospective_Model$model = function () {
 	};
 	return A5(
 		_user$project$Retrospective_Model$Model,
-		_user$project$Retrospective_Model$Listing,
+		_user$project$Retrospective_Model$JiraReview,
 		_user$project$Retrospective_Model$Start,
 		A4(_user$project$Retrospective_Model$Idea, '', _user$project$Retrospective_Model$Start, 0, 0),
 		dummyData,
 		3);
 }();
-var _user$project$Retrospective_Model$JiraReview = {ctor: 'JiraReview'};
 var _user$project$Retrospective_Model$Beginning = {ctor: 'Beginning'};
 var _user$project$Retrospective_Model$NoOp = {ctor: 'NoOp'};
 var _user$project$Retrospective_Model$Downvote = function (a) {
@@ -14386,6 +14386,74 @@ var _user$project$Retrospective_Update$update = F2(
 				return model;
 		}
 	});
+
+var _user$project$Retrospective_Views_JiraReview$reviewSteps = {
+	ctor: '::',
+	_0: _rtfeldman$elm_css$Html_Styled$text('Take a moment to go to Jira and close out the current sprint '),
+	_1: {
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Html_Styled$text('and review the burndown graph. Then, click proceed to move on.'),
+		_1: {ctor: '[]'}
+	}
+};
+var _user$project$Retrospective_Views_JiraReview$view = function (_p0) {
+	var pStyles = {
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Css$textAlign(_rtfeldman$elm_css$Css$justify),
+		_1: {
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Css$width(
+				_rtfeldman$elm_css$Css$px(400)),
+			_1: {
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Css$margin(_rtfeldman$elm_css$Css$auto),
+				_1: {ctor: '[]'}
+			}
+		}
+	};
+	return A2(
+		_rtfeldman$elm_css$Html_Styled$article,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_rtfeldman$elm_css$Html_Styled$h1,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _rtfeldman$elm_css$Html_Styled$text('Jira Review'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_rtfeldman$elm_css$Html_Styled$p,
+					{
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(pStyles),
+						_1: {ctor: '[]'}
+					},
+					_user$project$Retrospective_Views_JiraReview$reviewSteps),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_rtfeldman$elm_css$Html_Styled$button,
+						{
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
+								_user$project$Retrospective_Model$Step(_user$project$Retrospective_Model$Listing)),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Html_Styled$text('proceed'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+};
 
 var _user$project$Retrospective_Views_Shared$kindColor = function (kind) {
 	var _p0 = kind;
@@ -15148,6 +15216,8 @@ var _user$project$Retrospective_View$headerTab = F2(
 var _user$project$Retrospective_View$body = function (model) {
 	var _p0 = model.stage;
 	switch (_p0.ctor) {
+		case 'JiraReview':
+			return _user$project$Retrospective_Views_JiraReview$view(model);
 		case 'Voting':
 			return _user$project$Retrospective_Views_Voting$view(model);
 		case 'Report':
