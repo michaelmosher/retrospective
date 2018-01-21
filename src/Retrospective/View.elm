@@ -3,6 +3,7 @@ module Retrospective.View exposing (view)
 import Css exposing (..)
 import Html.Styled as Html exposing (Html, body, div, section, span, text)
 import Html.Styled.Attributes exposing (css)
+import Html.Styled.Events exposing (onClick)
 
 import Retrospective.Model exposing (Idea, Kind(..), Model, Msg(..), Stage(..))
 import Retrospective.Views.Listing as Views
@@ -15,20 +16,16 @@ view model =
     ]
 
 header : Stage -> Html Msg
-header active =
-    let styles = [
-        displayFlex,
-        overflow hidden,
-        fontSize (em 1.25),
-        marginBottom (px 20)
-    ]
-    in Html.header [css styles] [
-        headerTab Beginning active,
-        headerTab JiraReview active,
-        headerTab Listing active,
-        headerTab Voting active,
-        headerTab Report active
-    ]
+header activeStage =
+    let stages = [Beginning, JiraReview, Listing, Voting, Report]
+        styles = [
+            displayFlex,
+            overflow hidden,
+            fontSize (em 1.25),
+            marginBottom (px 20)
+        ]
+    in List.map (\stage -> headerTab stage activeStage) stages
+        |> Html.header [css styles]
 
 body : Model -> Html Msg
 body model =
@@ -37,10 +34,30 @@ body model =
 
 headerTab : Stage -> Stage -> Html Msg
 headerTab stage active =
-    let color = if stage == active
-            then theme.orange
-            else theme.peru
-        styles = [
+    if stage == active
+        then activeTab stage
+        else inactiveTab stage
+
+activeTab : Stage -> Html Msg
+activeTab = renderTab theme.orange
+
+inactiveTab : Stage -> Html Msg
+inactiveTab = renderTab theme.peru
+
+renderTab : Color -> Stage -> Html Msg
+renderTab color stage =
+    div [css (tabStyles color), onClick (Step stage)] [toString stage |> text]
+
+theme : { orange : Color, peru : Color, white : Color }
+theme =
+    { orange = hex "FFA500"
+    , peru = hex "CD853F"
+    , white = hex "FFFFFF"
+    }
+
+tabStyles : Color -> List(Style)
+tabStyles color =
+    [
         flexGrow (num 1),
         backgroundColor color,
         position relative,
@@ -49,14 +66,6 @@ headerTab stage active =
         before beforeNavigationStyles,
         after (afterNavigationStyles color)
     ]
-    in div [css styles] [toString stage |> text]
-
-theme : { orange : Color, peru : Color, white : Color }
-theme =
-    { orange = hex "FFA500"
-    , peru = hex "CD853F"
-    , white = hex "FFFFFF"
-    }
 
 afterNavigationStyles : Color -> List(Style)
 afterNavigationStyles color =

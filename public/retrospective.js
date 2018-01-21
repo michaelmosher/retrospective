@@ -14747,48 +14747,55 @@ var _user$project$Retrospective_View$beforeNavigationStyles = A2(
 			}
 		}
 	});
-var _user$project$Retrospective_View$headerTab = F2(
-	function (stage, active) {
-		var color = _elm_lang$core$Native_Utils.eq(stage, active) ? _user$project$Retrospective_View$theme.orange : _user$project$Retrospective_View$theme.peru;
-		var styles = {
+var _user$project$Retrospective_View$tabStyles = function (color) {
+	return {
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Css$flexGrow(
+			_rtfeldman$elm_css$Css$num(1)),
+		_1: {
 			ctor: '::',
-			_0: _rtfeldman$elm_css$Css$flexGrow(
-				_rtfeldman$elm_css$Css$num(1)),
+			_0: _rtfeldman$elm_css$Css$backgroundColor(color),
 			_1: {
 				ctor: '::',
-				_0: _rtfeldman$elm_css$Css$backgroundColor(color),
+				_0: _rtfeldman$elm_css$Css$position(_rtfeldman$elm_css$Css$relative),
 				_1: {
 					ctor: '::',
-					_0: _rtfeldman$elm_css$Css$position(_rtfeldman$elm_css$Css$relative),
+					_0: _rtfeldman$elm_css$Css$paddingLeft(
+						_rtfeldman$elm_css$Css$px(30)),
 					_1: {
 						ctor: '::',
-						_0: _rtfeldman$elm_css$Css$paddingLeft(
-							_rtfeldman$elm_css$Css$px(30)),
+						_0: _rtfeldman$elm_css$Css$marginRight(
+							_rtfeldman$elm_css$Css$px(5)),
 						_1: {
 							ctor: '::',
-							_0: _rtfeldman$elm_css$Css$marginRight(
-								_rtfeldman$elm_css$Css$px(5)),
+							_0: _rtfeldman$elm_css$Css$before(_user$project$Retrospective_View$beforeNavigationStyles),
 							_1: {
 								ctor: '::',
-								_0: _rtfeldman$elm_css$Css$before(_user$project$Retrospective_View$beforeNavigationStyles),
-								_1: {
-									ctor: '::',
-									_0: _rtfeldman$elm_css$Css$after(
-										_user$project$Retrospective_View$afterNavigationStyles(color)),
-									_1: {ctor: '[]'}
-								}
+								_0: _rtfeldman$elm_css$Css$after(
+									_user$project$Retrospective_View$afterNavigationStyles(color)),
+								_1: {ctor: '[]'}
 							}
 						}
 					}
 				}
 			}
-		};
+		}
+	};
+};
+var _user$project$Retrospective_View$renderTab = F2(
+	function (color, stage) {
 		return A2(
 			_rtfeldman$elm_css$Html_Styled$div,
 			{
 				ctor: '::',
-				_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(styles),
-				_1: {ctor: '[]'}
+				_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+					_user$project$Retrospective_View$tabStyles(color)),
+				_1: {
+					ctor: '::',
+					_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
+						_user$project$Retrospective_Model$Step(stage)),
+					_1: {ctor: '[]'}
+				}
 			},
 			{
 				ctor: '::',
@@ -14797,11 +14804,17 @@ var _user$project$Retrospective_View$headerTab = F2(
 				_1: {ctor: '[]'}
 			});
 	});
+var _user$project$Retrospective_View$inactiveTab = _user$project$Retrospective_View$renderTab(_user$project$Retrospective_View$theme.peru);
+var _user$project$Retrospective_View$activeTab = _user$project$Retrospective_View$renderTab(_user$project$Retrospective_View$theme.orange);
+var _user$project$Retrospective_View$headerTab = F2(
+	function (stage, active) {
+		return _elm_lang$core$Native_Utils.eq(stage, active) ? _user$project$Retrospective_View$activeTab(stage) : _user$project$Retrospective_View$inactiveTab(stage);
+	});
 var _user$project$Retrospective_View$body = function (model) {
 	var _p0 = model.stage;
 	return _user$project$Retrospective_Views_Listing$listing(model);
 };
-var _user$project$Retrospective_View$header = function (active) {
+var _user$project$Retrospective_View$header = function (activeStage) {
 	var styles = {
 		ctor: '::',
 		_0: _rtfeldman$elm_css$Css$displayFlex,
@@ -14821,6 +14834,27 @@ var _user$project$Retrospective_View$header = function (active) {
 			}
 		}
 	};
+	var stages = {
+		ctor: '::',
+		_0: _user$project$Retrospective_Model$Beginning,
+		_1: {
+			ctor: '::',
+			_0: _user$project$Retrospective_Model$JiraReview,
+			_1: {
+				ctor: '::',
+				_0: _user$project$Retrospective_Model$Listing,
+				_1: {
+					ctor: '::',
+					_0: _user$project$Retrospective_Model$Voting,
+					_1: {
+						ctor: '::',
+						_0: _user$project$Retrospective_Model$Report,
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		}
+	};
 	return A2(
 		_rtfeldman$elm_css$Html_Styled$header,
 		{
@@ -14828,27 +14862,12 @@ var _user$project$Retrospective_View$header = function (active) {
 			_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(styles),
 			_1: {ctor: '[]'}
 		},
-		{
-			ctor: '::',
-			_0: A2(_user$project$Retrospective_View$headerTab, _user$project$Retrospective_Model$Beginning, active),
-			_1: {
-				ctor: '::',
-				_0: A2(_user$project$Retrospective_View$headerTab, _user$project$Retrospective_Model$JiraReview, active),
-				_1: {
-					ctor: '::',
-					_0: A2(_user$project$Retrospective_View$headerTab, _user$project$Retrospective_Model$Listing, active),
-					_1: {
-						ctor: '::',
-						_0: A2(_user$project$Retrospective_View$headerTab, _user$project$Retrospective_Model$Voting, active),
-						_1: {
-							ctor: '::',
-							_0: A2(_user$project$Retrospective_View$headerTab, _user$project$Retrospective_Model$Report, active),
-							_1: {ctor: '[]'}
-						}
-					}
-				}
-			}
-		});
+		A2(
+			_elm_lang$core$List$map,
+			function (stage) {
+				return A2(_user$project$Retrospective_View$headerTab, stage, activeStage);
+			},
+			stages));
 };
 var _user$project$Retrospective_View$view = function (model) {
 	return A2(
