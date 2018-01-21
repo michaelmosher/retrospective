@@ -56,10 +56,10 @@ setKind : Kind -> Idea -> Idea
 setKind k i = { i | kind = k }
 
 upvote : Idea -> Idea
-upvote i = { i | votes = i.votes + 1}
+upvote i = { i | totalScore = i.totalScore + 1, votes = i.votes + 1}
 
 downvote : Idea -> Idea
-downvote i = { i | votes = i.votes - 1}
+downvote i = { i | totalScore = i.totalScore - 1, votes = i.votes - 1}
 
 setScore : Int -> Idea -> Idea
 setScore n i = { i | totalScore = n }

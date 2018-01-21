@@ -7,6 +7,7 @@ import Html.Styled.Events exposing (onClick)
 
 import Retrospective.Model exposing (Idea, Kind(..), Model, Msg(..), Stage(..))
 import Retrospective.Views.Listing as Listing
+import Retrospective.Views.Report as Report
 import Retrospective.Views.Voting as Voting
 
 view : Model -> Html Msg
@@ -32,6 +33,7 @@ body : Model -> Html Msg
 body model =
     case model.stage of
         Voting -> Voting.view model
+        Report -> Report.view model
         _      -> Listing.view model
 
 headerTab : Stage -> Stage -> Html Msg

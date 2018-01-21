@@ -20,7 +20,7 @@ view model =
 
 submitButton : Html Msg
 submitButton =
-    button [] [text "Submit Votes"]
+    button [onClick (Step Report)] [text "Submit Votes"]
 
 renderIdea : Idea -> Html Msg
 renderIdea i =

@@ -14275,12 +14275,12 @@ var _user$project$Retrospective_Update$setScore = F2(
 var _user$project$Retrospective_Update$downvote = function (i) {
 	return _elm_lang$core$Native_Utils.update(
 		i,
-		{votes: i.votes - 1});
+		{totalScore: i.totalScore - 1, votes: i.votes - 1});
 };
 var _user$project$Retrospective_Update$upvote = function (i) {
 	return _elm_lang$core$Native_Utils.update(
 		i,
-		{votes: i.votes + 1});
+		{totalScore: i.totalScore + 1, votes: i.votes + 1});
 };
 var _user$project$Retrospective_Update$setKind = F2(
 	function (k, i) {
@@ -14717,6 +14717,99 @@ var _user$project$Retrospective_Views_Listing$view = function (model) {
 		});
 };
 
+var _user$project$Retrospective_Views_Report$renderIdea_ = F2(
+	function (topScores, i) {
+		var weight = A2(_elm_lang$core$List$member, i.totalScore, topScores) ? _rtfeldman$elm_css$Css$int(700) : _rtfeldman$elm_css$Css$int(400);
+		var styles = {
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Css$fontWeight(weight),
+			_1: {ctor: '[]'}
+		};
+		return A2(
+			_rtfeldman$elm_css$Html_Styled$li,
+			{
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(styles),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Html_Styled$text(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						i.note,
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							' - ',
+							_elm_lang$core$Basics$toString(i.totalScore)))),
+				_1: {ctor: '[]'}
+			});
+	});
+var _user$project$Retrospective_Views_Report$sortIdeasByScore = function (ideas) {
+	return _elm_lang$core$List$reverse(
+		A2(
+			_elm_lang$core$List$sortBy,
+			function (_) {
+				return _.totalScore;
+			},
+			ideas));
+};
+var _user$project$Retrospective_Views_Report$view = function (model) {
+	var sorted = _user$project$Retrospective_Views_Report$sortIdeasByScore(model.ideas);
+	var scores = A2(
+		_elm_lang$core$List$map,
+		function (_) {
+			return _.totalScore;
+		},
+		sorted);
+	var topScores = A2(_elm_lang$core$List$take, 3, scores);
+	var renderIdea = _user$project$Retrospective_Views_Report$renderIdea_(topScores);
+	return A2(
+		_rtfeldman$elm_css$Html_Styled$article,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_user$project$Retrospective_Views_Shared$ideaSection,
+				renderIdea,
+				_elm_lang$core$Native_Utils.update(
+					model,
+					{ideas: sorted})),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_rtfeldman$elm_css$Html_Styled$textarea,
+					{
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+							{
+								ctor: '::',
+								_0: _rtfeldman$elm_css$Css$fontSize(
+									_rtfeldman$elm_css$Css$em(1.5)),
+								_1: {
+									ctor: '::',
+									_0: _rtfeldman$elm_css$Css$minWidth(
+										_rtfeldman$elm_css$Css$px(636)),
+									_1: {
+										ctor: '::',
+										_0: _rtfeldman$elm_css$Css$minHeight(
+											_rtfeldman$elm_css$Css$px(200)),
+										_1: {ctor: '[]'}
+									}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Html_Styled_Attributes$placeholder('Use this area to record action items'),
+							_1: {ctor: '[]'}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+
 var _user$project$Retrospective_Views_Voting$checkMark = _elm_lang$core$String$fromChar(
 	_elm_lang$core$Char$fromCode(10004));
 var _user$project$Retrospective_Views_Voting$vote = function (msg) {
@@ -14862,7 +14955,12 @@ var _user$project$Retrospective_Views_Voting$renderIdea = function (i) {
 };
 var _user$project$Retrospective_Views_Voting$submitButton = A2(
 	_rtfeldman$elm_css$Html_Styled$button,
-	{ctor: '[]'},
+	{
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
+			_user$project$Retrospective_Model$Step(_user$project$Retrospective_Model$Report)),
+		_1: {ctor: '[]'}
+	},
 	{
 		ctor: '::',
 		_0: _rtfeldman$elm_css$Html_Styled$text('Submit Votes'),
@@ -15049,10 +15147,13 @@ var _user$project$Retrospective_View$headerTab = F2(
 	});
 var _user$project$Retrospective_View$body = function (model) {
 	var _p0 = model.stage;
-	if (_p0.ctor === 'Voting') {
-		return _user$project$Retrospective_Views_Voting$view(model);
-	} else {
-		return _user$project$Retrospective_Views_Listing$view(model);
+	switch (_p0.ctor) {
+		case 'Voting':
+			return _user$project$Retrospective_Views_Voting$view(model);
+		case 'Report':
+			return _user$project$Retrospective_Views_Report$view(model);
+		default:
+			return _user$project$Retrospective_Views_Listing$view(model);
 	}
 };
 var _user$project$Retrospective_View$header = function (activeStage) {
