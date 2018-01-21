@@ -2,11 +2,10 @@ module Retrospective.Views.Listing exposing (view)
 
 import Html.Styled exposing (Html, article, body, button, div, h1, input, li, section, span, text, ul)
 import Html.Styled.Attributes exposing (placeholder, style, value)
-import Html.Styled.Events exposing (on, onClick, onInput)
-import Json.Decode as Json
+import Html.Styled.Events exposing (onClick, onInput)
 
 import Retrospective.Model exposing (..)
-import Retrospective.Views.Shared exposing (ideaSection)
+import Retrospective.Views.Shared exposing (ideaSection, onEnter)
 
 view : Model -> Html Msg
 view model =
@@ -90,16 +89,3 @@ kindColor kind =
         Start    -> "lightgreen"
         Continue -> "lightblue"
         Stop     -> "pink"
-
--- adjusted from elm-todomvc
--- ref: https://github.com/evancz/elm-todomvc/blob/166e5f2afc704629ee6d03de00deac892dfaeed0/Todo.elm#L237-L246
-onEnter : Msg -> Html.Styled.Attribute Msg
-onEnter msg =
-    let
-        isEnter code =
-            if code == 13 then
-                Json.succeed msg
-            else
-                Json.fail "not ENTER"
-    in
-        on "keydown" (Json.andThen isEnter Html.Styled.Events.keyCode)

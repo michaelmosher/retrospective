@@ -14185,23 +14185,28 @@ var _rtfeldman$elm_css$Html_Styled_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
+var _user$project$Retrospective_Model$Participant = F2(
+	function (a, b) {
+		return {name: a, hasVoted: b};
+	});
 var _user$project$Retrospective_Model$Idea = F4(
 	function (a, b, c, d) {
 		return {note: a, kind: b, totalScore: c, votes: d};
 	});
-var _user$project$Retrospective_Model$Model = F5(
-	function (a, b, c, d, e) {
-		return {stage: a, activeKind: b, wipIdea: c, ideas: d, votesRemaining: e};
+var _user$project$Retrospective_Model$Model = F7(
+	function (a, b, c, d, e, f, g) {
+		return {stage: a, activeKind: b, wipIdea: c, ideas: d, votesRemaining: e, wipParticipant: f, participants: g};
 	});
-var _user$project$Retrospective_Model$Continue = {ctor: 'Continue'};
-var _user$project$Retrospective_Model$Stop = {ctor: 'Stop'};
-var _user$project$Retrospective_Model$Start = {ctor: 'Start'};
 var _user$project$Retrospective_Model$Report = {ctor: 'Report'};
 var _user$project$Retrospective_Model$Voting = {ctor: 'Voting'};
 var _user$project$Retrospective_Model$Listing = {ctor: 'Listing'};
 var _user$project$Retrospective_Model$JiraReview = {ctor: 'JiraReview'};
+var _user$project$Retrospective_Model$Beginning = {ctor: 'Beginning'};
+var _user$project$Retrospective_Model$Continue = {ctor: 'Continue'};
+var _user$project$Retrospective_Model$Stop = {ctor: 'Stop'};
+var _user$project$Retrospective_Model$Start = {ctor: 'Start'};
 var _user$project$Retrospective_Model$model = function () {
-	var dummyData = {
+	var dummyIdeas = {
 		ctor: '::',
 		_0: A4(_user$project$Retrospective_Model$Idea, 'Defer “unknowns” and features no one can explain to us.', _user$project$Retrospective_Model$Start, 5, 0),
 		_1: {
@@ -14234,16 +14239,25 @@ var _user$project$Retrospective_Model$model = function () {
 			}
 		}
 	};
-	return A5(
+	var dummyParticipants = {
+		ctor: '::',
+		_0: A2(_user$project$Retrospective_Model$Participant, 'Michael', false),
+		_1: {ctor: '[]'}
+	};
+	return A7(
 		_user$project$Retrospective_Model$Model,
-		_user$project$Retrospective_Model$JiraReview,
+		_user$project$Retrospective_Model$Beginning,
 		_user$project$Retrospective_Model$Start,
 		A4(_user$project$Retrospective_Model$Idea, '', _user$project$Retrospective_Model$Start, 0, 0),
-		dummyData,
-		3);
+		dummyIdeas,
+		3,
+		'',
+		dummyParticipants);
 }();
-var _user$project$Retrospective_Model$Beginning = {ctor: 'Beginning'};
 var _user$project$Retrospective_Model$NoOp = {ctor: 'NoOp'};
+var _user$project$Retrospective_Model$AddParticipant = function (a) {
+	return {ctor: 'AddParticipant', _0: a};
+};
 var _user$project$Retrospective_Model$Downvote = function (a) {
 	return {ctor: 'Downvote', _0: a};
 };
@@ -14266,12 +14280,6 @@ var _user$project$Retrospective_Model$Typing = function (a) {
 	return {ctor: 'Typing', _0: a};
 };
 
-var _user$project$Retrospective_Update$setScore = F2(
-	function (n, i) {
-		return _elm_lang$core$Native_Utils.update(
-			i,
-			{totalScore: n});
-	});
 var _user$project$Retrospective_Update$downvote = function (i) {
 	return _elm_lang$core$Native_Utils.update(
 		i,
@@ -14355,106 +14363,82 @@ var _user$project$Retrospective_Update$appendItem = F2(
 				});
 		}
 	});
-var _user$project$Retrospective_Update$update = F2(
-	function (msg, model) {
-		var _p2 = msg;
-		switch (_p2.ctor) {
-			case 'Typing':
-				var newWIPIdea = A2(_user$project$Retrospective_Update$setNote, _p2._0, model.wipIdea);
+var _user$project$Retrospective_Update$appendParticipant = F2(
+	function (model, name) {
+		var participants = A2(
+			_elm_lang$core$Basics_ops['++'],
+			model.participants,
+			{
+				ctor: '::',
+				_0: A2(_user$project$Retrospective_Model$Participant, name, false),
+				_1: {ctor: '[]'}
+			});
+		var _p2 = name;
+		if (_p2 === '') {
+			return model;
+		} else {
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{wipParticipant: '', participants: participants});
+		}
+	});
+var _user$project$Retrospective_Update$updateWIPField = F2(
+	function (model, text) {
+		var _p3 = model.stage;
+		switch (_p3.ctor) {
+			case 'Beginning':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{wipParticipant: text});
+			case 'Listing':
+				var newWIPIdea = A2(_user$project$Retrospective_Update$setNote, text, model.wipIdea);
 				return _elm_lang$core$Native_Utils.update(
 					model,
 					{wipIdea: newWIPIdea});
+			default:
+				return model;
+		}
+	});
+var _user$project$Retrospective_Update$update = F2(
+	function (msg, model) {
+		var _p4 = msg;
+		switch (_p4.ctor) {
+			case 'Typing':
+				return A2(_user$project$Retrospective_Update$updateWIPField, model, _p4._0);
 			case 'Change':
-				var _p3 = _p2._0;
-				var newWIPIdea = A2(_user$project$Retrospective_Update$setKind, _p3, model.wipIdea);
+				var _p5 = _p4._0;
+				var newWIPIdea = A2(_user$project$Retrospective_Update$setKind, _p5, model.wipIdea);
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{activeKind: _p3, wipIdea: newWIPIdea});
+					{activeKind: _p5, wipIdea: newWIPIdea});
 			case 'Step':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{stage: _p2._0});
+					{stage: _p4._0, wipParticipant: ''});
+			case 'AddParticipant':
+				return A2(_user$project$Retrospective_Update$appendParticipant, model, _p4._0);
 			case 'AddIdea':
-				return A2(_user$project$Retrospective_Update$appendItem, model, _p2._0);
+				return A2(_user$project$Retrospective_Update$appendItem, model, _p4._0);
 			case 'EditIdea':
-				return A2(_user$project$Retrospective_Update$editIdea, model, _p2._0);
+				return A2(_user$project$Retrospective_Update$editIdea, model, _p4._0);
 			case 'Upvote':
-				return A2(_user$project$Retrospective_Update$upvoteIdea, model, _p2._0);
+				return A2(_user$project$Retrospective_Update$upvoteIdea, model, _p4._0);
 			case 'Downvote':
-				return A2(_user$project$Retrospective_Update$downvoteIdea, model, _p2._0);
+				return A2(_user$project$Retrospective_Update$downvoteIdea, model, _p4._0);
 			default:
 				return model;
 		}
 	});
 
-var _user$project$Retrospective_Views_JiraReview$reviewSteps = {
-	ctor: '::',
-	_0: _rtfeldman$elm_css$Html_Styled$text('Take a moment to go to Jira and close out the current sprint '),
-	_1: {
-		ctor: '::',
-		_0: _rtfeldman$elm_css$Html_Styled$text('and review the burndown graph. Then, click proceed to move on.'),
-		_1: {ctor: '[]'}
-	}
-};
-var _user$project$Retrospective_Views_JiraReview$view = function (_p0) {
-	var pStyles = {
-		ctor: '::',
-		_0: _rtfeldman$elm_css$Css$textAlign(_rtfeldman$elm_css$Css$justify),
-		_1: {
-			ctor: '::',
-			_0: _rtfeldman$elm_css$Css$width(
-				_rtfeldman$elm_css$Css$px(400)),
-			_1: {
-				ctor: '::',
-				_0: _rtfeldman$elm_css$Css$margin(_rtfeldman$elm_css$Css$auto),
-				_1: {ctor: '[]'}
-			}
-		}
+var _user$project$Retrospective_Views_Shared$onEnter = function (msg) {
+	var isEnter = function (code) {
+		return _elm_lang$core$Native_Utils.eq(code, 13) ? _elm_lang$core$Json_Decode$succeed(msg) : _elm_lang$core$Json_Decode$fail('not ENTER');
 	};
 	return A2(
-		_rtfeldman$elm_css$Html_Styled$article,
-		{ctor: '[]'},
-		{
-			ctor: '::',
-			_0: A2(
-				_rtfeldman$elm_css$Html_Styled$h1,
-				{ctor: '[]'},
-				{
-					ctor: '::',
-					_0: _rtfeldman$elm_css$Html_Styled$text('Jira Review'),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_rtfeldman$elm_css$Html_Styled$p,
-					{
-						ctor: '::',
-						_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(pStyles),
-						_1: {ctor: '[]'}
-					},
-					_user$project$Retrospective_Views_JiraReview$reviewSteps),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_rtfeldman$elm_css$Html_Styled$button,
-						{
-							ctor: '::',
-							_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
-								_user$project$Retrospective_Model$Step(_user$project$Retrospective_Model$Listing)),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: _rtfeldman$elm_css$Html_Styled$text('proceed'),
-							_1: {ctor: '[]'}
-						}),
-					_1: {ctor: '[]'}
-				}
-			}
-		});
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'keydown',
+		A2(_elm_lang$core$Json_Decode$andThen, isEnter, _rtfeldman$elm_css$Html_Styled_Events$keyCode));
 };
-
 var _user$project$Retrospective_Views_Shared$kindColor = function (kind) {
 	var _p0 = kind;
 	switch (_p0.ctor) {
@@ -14556,15 +14540,198 @@ var _user$project$Retrospective_Views_Shared$ideaSection = F2(
 				kinds));
 	});
 
-var _user$project$Retrospective_Views_Listing$onEnter = function (msg) {
-	var isEnter = function (code) {
-		return _elm_lang$core$Native_Utils.eq(code, 13) ? _elm_lang$core$Json_Decode$succeed(msg) : _elm_lang$core$Json_Decode$fail('not ENTER');
+var _user$project$Retrospective_Views_Beginning$renderParticipant = function (participant) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled$li,
+		{
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+				{
+					ctor: '::',
+					_0: _rtfeldman$elm_css$Css$fontSize(
+						_rtfeldman$elm_css$Css$em(1.5)),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Html_Styled$text(participant.name),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$Retrospective_Views_Beginning$participantInput = function (model) {
+	var styles = {
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Css$width(
+			_rtfeldman$elm_css$Css$px(400)),
+		_1: {
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Css$height(
+				_rtfeldman$elm_css$Css$em(2)),
+			_1: {
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Css$lineHeight(
+					_rtfeldman$elm_css$Css$em(2)),
+				_1: {
+					ctor: '::',
+					_0: _rtfeldman$elm_css$Css$fontSize(
+						_rtfeldman$elm_css$Css$em(1)),
+					_1: {ctor: '[]'}
+				}
+			}
+		}
+	};
+	var attributes = {
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(styles),
+		_1: {
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Html_Styled_Attributes$placeholder('Input retrospective participants here...'),
+			_1: {
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Html_Styled_Attributes$value(model.wipParticipant),
+				_1: {
+					ctor: '::',
+					_0: _user$project$Retrospective_Views_Shared$onEnter(
+						_user$project$Retrospective_Model$AddParticipant(model.wipParticipant)),
+					_1: {
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Html_Styled_Events$onInput(_user$project$Retrospective_Model$Typing),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		}
 	};
 	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'keydown',
-		A2(_elm_lang$core$Json_Decode$andThen, isEnter, _rtfeldman$elm_css$Html_Styled_Events$keyCode));
+		_rtfeldman$elm_css$Html_Styled$input,
+		attributes,
+		{ctor: '[]'});
 };
+var _user$project$Retrospective_Views_Beginning$view = function (model) {
+	var listStyles = {
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Css$textAlign(_rtfeldman$elm_css$Css$left),
+		_1: {
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Css$width(
+				_rtfeldman$elm_css$Css$px(300)),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_rtfeldman$elm_css$Css$margin2,
+					_rtfeldman$elm_css$Css$px(10),
+					_rtfeldman$elm_css$Css$auto),
+				_1: {ctor: '[]'}
+			}
+		}
+	};
+	return A2(
+		_rtfeldman$elm_css$Html_Styled$article,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _user$project$Retrospective_Views_Beginning$participantInput(model),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_rtfeldman$elm_css$Html_Styled$ul,
+					{
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(listStyles),
+						_1: {ctor: '[]'}
+					},
+					A2(_elm_lang$core$List$map, _user$project$Retrospective_Views_Beginning$renderParticipant, model.participants)),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_rtfeldman$elm_css$Html_Styled$button,
+						{
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
+								_user$project$Retrospective_Model$Step(_user$project$Retrospective_Model$JiraReview)),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Html_Styled$text('proceed'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+};
+
+var _user$project$Retrospective_Views_JiraReview$reviewSteps = {
+	ctor: '::',
+	_0: _rtfeldman$elm_css$Html_Styled$text('Take a moment to go to Jira, close out the current sprint '),
+	_1: {
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Html_Styled$text('and review the burndown graph. Then, click proceed to move on.'),
+		_1: {ctor: '[]'}
+	}
+};
+var _user$project$Retrospective_Views_JiraReview$view = function (_p0) {
+	var pStyles = {
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Css$textAlign(_rtfeldman$elm_css$Css$justify),
+		_1: {
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Css$width(
+				_rtfeldman$elm_css$Css$px(400)),
+			_1: {
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Css$margin(_rtfeldman$elm_css$Css$auto),
+				_1: {ctor: '[]'}
+			}
+		}
+	};
+	return A2(
+		_rtfeldman$elm_css$Html_Styled$article,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_rtfeldman$elm_css$Html_Styled$h1,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _rtfeldman$elm_css$Html_Styled$text('Jira Review'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_rtfeldman$elm_css$Html_Styled$p,
+					{
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(pStyles),
+						_1: {ctor: '[]'}
+					},
+					_user$project$Retrospective_Views_JiraReview$reviewSteps),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_rtfeldman$elm_css$Html_Styled$button,
+						{
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
+								_user$project$Retrospective_Model$Step(_user$project$Retrospective_Model$Listing)),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Html_Styled$text('proceed'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+};
+
 var _user$project$Retrospective_Views_Listing$kindColor = function (kind) {
 	var _p0 = kind;
 	switch (_p0.ctor) {
@@ -14689,7 +14856,7 @@ var _user$project$Retrospective_Views_Listing$ideaBody = function (model) {
 				_0: _rtfeldman$elm_css$Html_Styled_Attributes$value(wipNote),
 				_1: {
 					ctor: '::',
-					_0: _user$project$Retrospective_Views_Listing$onEnter(
+					_0: _user$project$Retrospective_Views_Shared$onEnter(
 						_user$project$Retrospective_Model$AddIdea(model.wipIdea)),
 					_1: {
 						ctor: '::',
@@ -15216,14 +15383,16 @@ var _user$project$Retrospective_View$headerTab = F2(
 var _user$project$Retrospective_View$body = function (model) {
 	var _p0 = model.stage;
 	switch (_p0.ctor) {
+		case 'Beginning':
+			return _user$project$Retrospective_Views_Beginning$view(model);
 		case 'JiraReview':
 			return _user$project$Retrospective_Views_JiraReview$view(model);
+		case 'Listing':
+			return _user$project$Retrospective_Views_Listing$view(model);
 		case 'Voting':
 			return _user$project$Retrospective_Views_Voting$view(model);
-		case 'Report':
-			return _user$project$Retrospective_Views_Report$view(model);
 		default:
-			return _user$project$Retrospective_Views_Listing$view(model);
+			return _user$project$Retrospective_Views_Report$view(model);
 	}
 };
 var _user$project$Retrospective_View$header = function (activeStage) {

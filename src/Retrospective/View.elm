@@ -6,6 +6,7 @@ import Html.Styled.Attributes exposing (css)
 import Html.Styled.Events exposing (onClick)
 
 import Retrospective.Model exposing (Idea, Kind(..), Model, Msg(..), Stage(..))
+import Retrospective.Views.Beginning as Beginning
 import Retrospective.Views.JiraReview as JiraReview
 import Retrospective.Views.Listing as Listing
 import Retrospective.Views.Report as Report
@@ -33,10 +34,11 @@ header activeStage =
 body : Model -> Html Msg
 body model =
     case model.stage of
+        Beginning  -> Beginning.view model
         JiraReview -> JiraReview.view model
-        Voting -> Voting.view model
-        Report -> Report.view model
-        _      -> Listing.view model
+        Listing    -> Listing.view model
+        Voting     -> Voting.view model
+        Report     -> Report.view model
 
 headerTab : Stage -> Stage -> Html Msg
 headerTab stage active =
