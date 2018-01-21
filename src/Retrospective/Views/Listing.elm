@@ -1,14 +1,15 @@
 module Retrospective.Views.Listing exposing (listing)
 
-import Html exposing (Html, body, button, div, h1, input, li, section, span, text, ul)
+import Html exposing (Html, article, body, button, div, h1, input, li, section, span, text, ul)
 import Html.Attributes exposing (placeholder, style, value)
 import Html.Events exposing (on, onClick, onInput)
 import Json.Decode as Json
+
 import Retrospective.Model exposing (..)
 
 listing : Model -> Html Msg
 listing model =
-    div [] [
+    article [] [
         ideaBox model,
         ideaSection model,
         votingButton
@@ -16,13 +17,36 @@ listing model =
 
 ideaBox : Model -> Html Msg
 ideaBox model =
-    let submit = AddIdea model.wipIdea
-        wipNote = model.wipIdea.note
-        ph = "Ideas to start, stop, or continue"
+    section [] [
+        ideaHeader,
+        ideaBody model
+    ]
+
+ideaHeader : Html Msg
+ideaHeader =
+    let styles = [
+            ("width", "600px"),
+            ("height", "2em"),
+            ("line-height", "2em"),
+            ("margin", "auto"),
+            ("display", "flex"),
+            ("justify-content", "center")
+    ]
+    in div [style styles] [
+            ideaTab Start,
+            ideaTab Stop,
+            ideaTab Continue
+        ]
+
+ideaBody : Model -> Html Msg
+ideaBody model =
+    let wipNote = model.wipIdea.note
         borderColor = kindColor model.activeKind
+
         inputStyles = [
             ("width", "600px"),
             ("height", "4em"),
+            ("resize", "none"),
             ("margin", "auto"),
             ("padding", "5px"),
             ("border-width", "5px"),
@@ -30,23 +54,15 @@ ideaBox model =
             ("border-color", borderColor),
             ("font-size", "1em")
         ]
-        divStyles = [
-            ("width", "600px"),
-            ("height", "2em"),
-            ("line-height", "2em"),
-            ("margin", "auto"),
-            ("display", "flex"),
-            ("justify-content", "center")
+
+        attributes = [
+            style inputStyles,
+            placeholder "Ideas to start, stop, or continue",
+            value wipNote,
+            onEnter (AddIdea model.wipIdea),
+            onInput Typing
         ]
-    in
-        section [] [
-            div [style divStyles] [
-                ideaTab Start,
-                ideaTab Stop,
-                ideaTab Continue
-            ],
-            input [style inputStyles, placeholder ph, value wipNote, onEnter submit, onInput Typing] []
-        ]
+    in input attributes []
 
 ideaTab : Kind -> Html Msg
 ideaTab kind =

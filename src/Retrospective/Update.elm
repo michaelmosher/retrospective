@@ -27,7 +27,7 @@ editIdea : Model -> Idea -> Model
 editIdea model i =
     let ideas = List.partition (\x -> x == i) model.ideas |> Tuple.second
     in
-        { model | wipIdea = i, ideas = ideas }
+        { model | wipIdea = i, activeKind = i.kind, ideas = ideas }
 
 plusScore : Model -> Idea -> Model
 plusScore = vote 1

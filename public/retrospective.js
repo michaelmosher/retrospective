@@ -8377,7 +8377,7 @@ var _user$project$Retrospective_Update$editIdea = F2(
 				model.ideas));
 		return _elm_lang$core$Native_Utils.update(
 			model,
-			{wipIdea: i, ideas: ideas});
+			{wipIdea: i, activeKind: i.kind, ideas: ideas});
 	});
 var _user$project$Retrospective_Update$appendItem = F2(
 	function (model, i) {
@@ -8586,8 +8586,75 @@ var _user$project$Retrospective_Views_Listing$ideaTab = function (kind) {
 			_1: {ctor: '[]'}
 		});
 };
-var _user$project$Retrospective_Views_Listing$ideaBox = function (model) {
-	var divStyles = {
+var _user$project$Retrospective_Views_Listing$ideaBody = function (model) {
+	var borderColor = _user$project$Retrospective_Views_Listing$kindColor(model.activeKind);
+	var inputStyles = {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'width', _1: '600px'},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'height', _1: '4em'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'resize', _1: 'none'},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'margin', _1: 'auto'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'padding', _1: '5px'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'border-width', _1: '5px'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'border-style', _1: 'solid'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'border-color', _1: borderColor},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'font-size', _1: '1em'},
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	};
+	var wipNote = model.wipIdea.note;
+	var attributes = {
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$style(inputStyles),
+		_1: {
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$placeholder('Ideas to start, stop, or continue'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$value(wipNote),
+				_1: {
+					ctor: '::',
+					_0: _user$project$Retrospective_Views_Listing$onEnter(
+						_user$project$Retrospective_Model$AddIdea(model.wipIdea)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onInput(_user$project$Retrospective_Model$Typing),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		}
+	};
+	return A2(
+		_elm_lang$html$Html$input,
+		attributes,
+		{ctor: '[]'});
+};
+var _user$project$Retrospective_Views_Listing$ideaHeader = function () {
+	var styles = {
 		ctor: '::',
 		_0: {ctor: '_Tuple2', _0: 'width', _1: '600px'},
 		_1: {
@@ -8612,101 +8679,44 @@ var _user$project$Retrospective_Views_Listing$ideaBox = function (model) {
 			}
 		}
 	};
-	var borderColor = _user$project$Retrospective_Views_Listing$kindColor(model.activeKind);
-	var inputStyles = {
-		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'width', _1: '600px'},
-		_1: {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
 			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'height', _1: '4em'},
+			_0: _elm_lang$html$Html_Attributes$style(styles),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _user$project$Retrospective_Views_Listing$ideaTab(_user$project$Retrospective_Model$Start),
 			_1: {
 				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: 'margin', _1: 'auto'},
+				_0: _user$project$Retrospective_Views_Listing$ideaTab(_user$project$Retrospective_Model$Stop),
 				_1: {
 					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'padding', _1: '5px'},
-					_1: {
-						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'border-width', _1: '5px'},
-						_1: {
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'border-style', _1: 'solid'},
-							_1: {
-								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'border-color', _1: borderColor},
-								_1: {
-									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'font-size', _1: '1em'},
-									_1: {ctor: '[]'}
-								}
-							}
-						}
-					}
+					_0: _user$project$Retrospective_Views_Listing$ideaTab(_user$project$Retrospective_Model$Continue),
+					_1: {ctor: '[]'}
 				}
 			}
-		}
-	};
-	var ph = 'Ideas to start, stop, or continue';
-	var wipNote = model.wipIdea.note;
-	var submit = _user$project$Retrospective_Model$AddIdea(model.wipIdea);
+		});
+}();
+var _user$project$Retrospective_Views_Listing$ideaBox = function (model) {
 	return A2(
 		_elm_lang$html$Html$section,
 		{ctor: '[]'},
 		{
 			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$div,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$style(divStyles),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: _user$project$Retrospective_Views_Listing$ideaTab(_user$project$Retrospective_Model$Start),
-					_1: {
-						ctor: '::',
-						_0: _user$project$Retrospective_Views_Listing$ideaTab(_user$project$Retrospective_Model$Stop),
-						_1: {
-							ctor: '::',
-							_0: _user$project$Retrospective_Views_Listing$ideaTab(_user$project$Retrospective_Model$Continue),
-							_1: {ctor: '[]'}
-						}
-					}
-				}),
+			_0: _user$project$Retrospective_Views_Listing$ideaHeader,
 			_1: {
 				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$input,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$style(inputStyles),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$placeholder(ph),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$value(wipNote),
-								_1: {
-									ctor: '::',
-									_0: _user$project$Retrospective_Views_Listing$onEnter(submit),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$html$Html_Events$onInput(_user$project$Retrospective_Model$Typing),
-										_1: {ctor: '[]'}
-									}
-								}
-							}
-						}
-					},
-					{ctor: '[]'}),
+				_0: _user$project$Retrospective_Views_Listing$ideaBody(model),
 				_1: {ctor: '[]'}
 			}
 		});
 };
 var _user$project$Retrospective_Views_Listing$listing = function (model) {
 	return A2(
-		_elm_lang$html$Html$div,
+		_elm_lang$html$Html$article,
 		{ctor: '[]'},
 		{
 			ctor: '::',
