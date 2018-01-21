@@ -14359,6 +14359,107 @@ var _user$project$Retrospective_Update$update = F2(
 		}
 	});
 
+var _user$project$Retrospective_Views_Shared$kindColor = function (kind) {
+	var _p0 = kind;
+	switch (_p0.ctor) {
+		case 'Start':
+			return _rtfeldman$elm_css$Css$hex('90EE90');
+		case 'Continue':
+			return _rtfeldman$elm_css$Css$hex('ADD8E6');
+		default:
+			return _rtfeldman$elm_css$Css$hex('FFC0CB');
+	}
+};
+var _user$project$Retrospective_Views_Shared$ideaListStyles = function (color) {
+	return {
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Css$width(
+			_rtfeldman$elm_css$Css$pct(33)),
+		_1: {
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Css$textAlign(_rtfeldman$elm_css$Css$left),
+			_1: {
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Css$backgroundColor(color),
+				_1: {
+					ctor: '::',
+					_0: _rtfeldman$elm_css$Css$paddingTop(
+						_rtfeldman$elm_css$Css$px(10)),
+					_1: {
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Css$paddingBottom(
+							_rtfeldman$elm_css$Css$px(10)),
+						_1: {
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Css$paddingRight(
+								_rtfeldman$elm_css$Css$px(5)),
+							_1: {
+								ctor: '::',
+								_0: _rtfeldman$elm_css$Css$minHeight(
+									_rtfeldman$elm_css$Css$em(3)),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			}
+		}
+	};
+};
+var _user$project$Retrospective_Views_Shared$ideaList = F3(
+	function (kind, renderFn, ideas) {
+		var bgColor = _user$project$Retrospective_Views_Shared$kindColor(kind);
+		var ideas_ = A2(
+			_elm_lang$core$List$filter,
+			function (i) {
+				return _elm_lang$core$Native_Utils.eq(i.kind, kind);
+			},
+			ideas);
+		return A2(
+			_rtfeldman$elm_css$Html_Styled$ul,
+			{
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+					_user$project$Retrospective_Views_Shared$ideaListStyles(bgColor)),
+				_1: {ctor: '[]'}
+			},
+			A2(_elm_lang$core$List$map, renderFn, ideas_));
+	});
+var _user$project$Retrospective_Views_Shared$ideaSection = F2(
+	function (renderFn, model) {
+		var kinds = {
+			ctor: '::',
+			_0: _user$project$Retrospective_Model$Start,
+			_1: {
+				ctor: '::',
+				_0: _user$project$Retrospective_Model$Stop,
+				_1: {
+					ctor: '::',
+					_0: _user$project$Retrospective_Model$Continue,
+					_1: {ctor: '[]'}
+				}
+			}
+		};
+		return A2(
+			_rtfeldman$elm_css$Html_Styled$section,
+			{
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+					{
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Css$displayFlex,
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			},
+			A2(
+				_elm_lang$core$List$map,
+				function (k) {
+					return A3(_user$project$Retrospective_Views_Shared$ideaList, k, renderFn, model.ideas);
+				},
+				kinds));
+	});
+
 var _user$project$Retrospective_Views_Listing$onEnter = function (msg) {
 	var isEnter = function (code) {
 		return _elm_lang$core$Native_Utils.eq(code, 13) ? _elm_lang$core$Json_Decode$succeed(msg) : _elm_lang$core$Json_Decode$fail('not ENTER');
@@ -14392,79 +14493,6 @@ var _user$project$Retrospective_Views_Listing$renderIdea = function (i) {
 			ctor: '::',
 			_0: _rtfeldman$elm_css$Html_Styled$text(i.note),
 			_1: {ctor: '[]'}
-		});
-};
-var _user$project$Retrospective_Views_Listing$ideaList = F2(
-	function (kind, ideas) {
-		var bgColor = _user$project$Retrospective_Views_Listing$kindColor(kind);
-		var styles = {
-			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 'text-align', _1: 'left'},
-			_1: {
-				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: 'background', _1: bgColor},
-				_1: {
-					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'padding-top', _1: '10px'},
-					_1: {
-						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'padding-bottom', _1: '10px'},
-						_1: {
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'width', _1: '33%'},
-							_1: {
-								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'min-height', _1: '3em'},
-								_1: {ctor: '[]'}
-							}
-						}
-					}
-				}
-			}
-		};
-		var ideas_ = A2(
-			_elm_lang$core$List$filter,
-			function (i) {
-				return _elm_lang$core$Native_Utils.eq(i.kind, kind);
-			},
-			ideas);
-		return A2(
-			_rtfeldman$elm_css$Html_Styled$ul,
-			{
-				ctor: '::',
-				_0: _rtfeldman$elm_css$Html_Styled_Attributes$style(styles),
-				_1: {ctor: '[]'}
-			},
-			A2(_elm_lang$core$List$map, _user$project$Retrospective_Views_Listing$renderIdea, ideas_));
-	});
-var _user$project$Retrospective_Views_Listing$continueIdeaList = _user$project$Retrospective_Views_Listing$ideaList(_user$project$Retrospective_Model$Continue);
-var _user$project$Retrospective_Views_Listing$stopIdeaList = _user$project$Retrospective_Views_Listing$ideaList(_user$project$Retrospective_Model$Stop);
-var _user$project$Retrospective_Views_Listing$startIdeaList = _user$project$Retrospective_Views_Listing$ideaList(_user$project$Retrospective_Model$Start);
-var _user$project$Retrospective_Views_Listing$ideaSection = function (model) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled$section,
-		{
-			ctor: '::',
-			_0: _rtfeldman$elm_css$Html_Styled_Attributes$style(
-				{
-					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'display', _1: 'flex'},
-					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: _user$project$Retrospective_Views_Listing$startIdeaList(model.ideas),
-			_1: {
-				ctor: '::',
-				_0: _user$project$Retrospective_Views_Listing$stopIdeaList(model.ideas),
-				_1: {
-					ctor: '::',
-					_0: _user$project$Retrospective_Views_Listing$continueIdeaList(model.ideas),
-					_1: {ctor: '[]'}
-				}
-			}
 		});
 };
 var _user$project$Retrospective_Views_Listing$votingButton = A2(
@@ -14642,7 +14670,7 @@ var _user$project$Retrospective_Views_Listing$ideaBox = function (model) {
 			}
 		});
 };
-var _user$project$Retrospective_Views_Listing$listing = function (model) {
+var _user$project$Retrospective_Views_Listing$view = function (model) {
 	return A2(
 		_rtfeldman$elm_css$Html_Styled$article,
 		{ctor: '[]'},
@@ -14651,11 +14679,175 @@ var _user$project$Retrospective_Views_Listing$listing = function (model) {
 			_0: _user$project$Retrospective_Views_Listing$ideaBox(model),
 			_1: {
 				ctor: '::',
-				_0: _user$project$Retrospective_Views_Listing$ideaSection(model),
+				_0: A2(_user$project$Retrospective_Views_Shared$ideaSection, _user$project$Retrospective_Views_Listing$renderIdea, model),
 				_1: {
 					ctor: '::',
 					_0: _user$project$Retrospective_Views_Listing$votingButton,
 					_1: {ctor: '[]'}
+				}
+			}
+		});
+};
+
+var _user$project$Retrospective_Views_Voting$checkMark = _elm_lang$core$String$fromChar(
+	_elm_lang$core$Char$fromCode(10004));
+var _user$project$Retrospective_Views_Voting$vote = function () {
+	var styles = {
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Css$width(
+			_rtfeldman$elm_css$Css$px(30)),
+		_1: {
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Css$height(
+				_rtfeldman$elm_css$Css$px(30)),
+			_1: {
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Css$fontSize(
+					_rtfeldman$elm_css$Css$em(1.35)),
+				_1: {
+					ctor: '::',
+					_0: _rtfeldman$elm_css$Css$lineHeight(
+						_rtfeldman$elm_css$Css$em(1)),
+					_1: {
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Css$backgroundColor(
+							_rtfeldman$elm_css$Css$hex('008000')),
+						_1: {
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Css$color(
+								_rtfeldman$elm_css$Css$hex('ffffff')),
+							_1: {
+								ctor: '::',
+								_0: _rtfeldman$elm_css$Css$borderRadius(
+									_rtfeldman$elm_css$Css$px(20)),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			}
+		}
+	};
+	return A2(
+		_rtfeldman$elm_css$Html_Styled$div,
+		{
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(styles),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Html_Styled$text(_user$project$Retrospective_Views_Voting$checkMark),
+			_1: {ctor: '[]'}
+		});
+}();
+var _user$project$Retrospective_Views_Voting$votesBox = function () {
+	var styles = {
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Css$displayFlex,
+		_1: {
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Css$justifyContent(_rtfeldman$elm_css$Css$center),
+			_1: {
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Css$width(
+					_rtfeldman$elm_css$Css$px(100)),
+				_1: {
+					ctor: '::',
+					_0: _rtfeldman$elm_css$Css$margin(_rtfeldman$elm_css$Css$auto),
+					_1: {ctor: '[]'}
+				}
+			}
+		}
+	};
+	return A2(
+		_rtfeldman$elm_css$Html_Styled$div,
+		{
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(styles),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _user$project$Retrospective_Views_Voting$vote,
+			_1: {
+				ctor: '::',
+				_0: _user$project$Retrospective_Views_Voting$vote,
+				_1: {
+					ctor: '::',
+					_0: _user$project$Retrospective_Views_Voting$vote,
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+}();
+var _user$project$Retrospective_Views_Voting$renderIdea = function (i) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_rtfeldman$elm_css$Html_Styled$li,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _rtfeldman$elm_css$Html_Styled$text(i.note),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_rtfeldman$elm_css$Html_Styled$div,
+					{
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+							{
+								ctor: '::',
+								_0: _rtfeldman$elm_css$Css$minHeight(
+									_rtfeldman$elm_css$Css$px(45)),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					},
+					{ctor: '[]'}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _user$project$Retrospective_Views_Voting$submitButton = A2(
+	_rtfeldman$elm_css$Html_Styled$button,
+	{ctor: '[]'},
+	{
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Html_Styled$text('Submit Votes'),
+		_1: {ctor: '[]'}
+	});
+var _user$project$Retrospective_Views_Voting$view = function (model) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled$article,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_rtfeldman$elm_css$Html_Styled$span,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _rtfeldman$elm_css$Html_Styled$text('Click ideas below to vote'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _user$project$Retrospective_Views_Voting$votesBox,
+				_1: {
+					ctor: '::',
+					_0: A2(_user$project$Retrospective_Views_Shared$ideaSection, _user$project$Retrospective_Views_Voting$renderIdea, model),
+					_1: {
+						ctor: '::',
+						_0: _user$project$Retrospective_Views_Voting$submitButton,
+						_1: {ctor: '[]'}
+					}
 				}
 			}
 		});
@@ -14812,7 +15004,11 @@ var _user$project$Retrospective_View$headerTab = F2(
 	});
 var _user$project$Retrospective_View$body = function (model) {
 	var _p0 = model.stage;
-	return _user$project$Retrospective_Views_Listing$listing(model);
+	if (_p0.ctor === 'Voting') {
+		return _user$project$Retrospective_Views_Voting$view(model);
+	} else {
+		return _user$project$Retrospective_Views_Listing$view(model);
+	}
 };
 var _user$project$Retrospective_View$header = function (activeStage) {
 	var styles = {

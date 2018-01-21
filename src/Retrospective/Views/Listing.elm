@@ -1,4 +1,4 @@
-module Retrospective.Views.Listing exposing (listing)
+module Retrospective.Views.Listing exposing (view)
 
 import Html.Styled exposing (Html, article, body, button, div, h1, input, li, section, span, text, ul)
 import Html.Styled.Attributes exposing (placeholder, style, value)
@@ -6,12 +6,13 @@ import Html.Styled.Events exposing (on, onClick, onInput)
 import Json.Decode as Json
 
 import Retrospective.Model exposing (..)
+import Retrospective.Views.Shared exposing (ideaSection)
 
-listing : Model -> Html Msg
-listing model =
+view : Model -> Html Msg
+view model =
     article [] [
         ideaBox model,
-        ideaSection model,
+        ideaSection renderIdea model,
         votingButton
     ]
 
@@ -77,37 +78,6 @@ ideaTab kind =
 votingButton : Html Msg
 votingButton =
     button [onClick (Step Voting)] [text "Start Voting"]
-
-ideaSection : Model -> Html Msg
-ideaSection model =
-    section [style [("display", "flex")]] [
-        startIdeaList model.ideas,
-        stopIdeaList model.ideas,
-        continueIdeaList model.ideas
-    ]
-
-startIdeaList : List(Idea) -> Html Msg
-startIdeaList = ideaList Start
-
-stopIdeaList : List(Idea) -> Html Msg
-stopIdeaList = ideaList Stop
-
-continueIdeaList : List(Idea) -> Html Msg
-continueIdeaList = ideaList Continue
-
-ideaList : Kind -> List(Idea) -> Html Msg
-ideaList kind ideas =
-    let ideas_ = List.filter (\i -> i.kind == kind) ideas
-        bgColor = kindColor kind
-        styles = [
-            ("text-align", "left"),
-            ("background", bgColor),
-            ("padding-top", "10px"),
-            ("padding-bottom", "10px"),
-            ("width", "33%"),
-            ("min-height", "3em")
-        ]
-    in ideas_ |> List.map renderIdea |> ul [style styles]
 
 renderIdea : Idea -> Html Msg
 renderIdea i =

@@ -1,40 +1,57 @@
-module Retrospective.Views.Voting exposing (..)
+module Retrospective.Views.Voting exposing (view)
 
 import Char
-import Html exposing (Html, div, text)
-import Html.Attributes exposing (style)
+import Css exposing (..)
+import Html.Styled exposing (Html, article, button, div, li, section, span, text)
+import Html.Styled.Attributes exposing (css, style)
 
 import Retrospective.Model exposing (..)
+import Retrospective.Views.Shared exposing (ideaSection)
 
+view : Model -> Html Msg
+view model =
+    article [] [
+        span [] [text "Click ideas below to vote"],
+        votesBox,
+        ideaSection renderIdea model,
+        submitButton
+    ]
 
-votableIdea : Idea -> Html Msg
-votableIdea i =
-    div [] []
-    --     button [onClick (MinusScore i)] [text "-"],
-    --     li [] [i.note ++ " - " ++ toString i.score |> text],
-    --     button [onClick (PlusScore i)] [text "+"]
-    -- ]
+submitButton : Html Msg
+submitButton =
+    button [] [text "Submit Votes"]
+
+renderIdea : Idea -> Html Msg
+renderIdea i =
+    div [] [
+        li [] [i.note |> text],
+        div [css [minHeight (px 45)]] []
+    ]
 
 votesBox : Html Msg
 votesBox =
     let styles = [
-            ("display", "flex")
+            displayFlex,
+            justifyContent center,
+            width (px 100),
+            margin auto
         ]
-    in div [style styles] [
+    in div [css styles] [
             vote, vote, vote
         ]
 
-vote : Html.Html Msg
+vote : Html Msg
 vote =
     let styles = [
-        ("width", "40px"),
-        ("height", "40px"),
-        ("line-height", "1em"),
-        ("background", "green"),
-        ("color", "white"),
-        ("border-radius", "20px")
+        width (px 30),
+        height (px 30),
+        fontSize (em 1.35),
+        lineHeight (em 1),
+        backgroundColor (hex "008000"), -- "green"
+        color (hex "ffffff"), -- "white"
+        borderRadius (px 20)
     ]
-    in div [style styles] [checkMark |> text]
+    in div [css styles] [checkMark |> text]
 
 checkMark : String
 checkMark = String.fromChar (Char.fromCode 10004)
