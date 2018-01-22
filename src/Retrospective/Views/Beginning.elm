@@ -6,21 +6,16 @@ import Html.Styled.Attributes exposing (css, placeholder, value)
 import Html.Styled.Events exposing (onClick, onInput)
 
 import Retrospective.Model exposing (..)
-import Retrospective.Views.Shared exposing (onEnter)
+import Retrospective.Views.Shared exposing (onEnter, participantList)
 
 
 view : Model -> Html Msg
 view model =
-    let listStyles = [
-            textAlign left,
-            width (px 300),
-            margin2 (px 10) auto
-        ]
-    in article [] [
-            participantInput model,
-            List.map renderParticipant model.participants |> ul [css listStyles],
-            button [onClick (Step JiraReview)] [text "proceed"]
-        ]
+    article [] [
+        participantInput model,
+        participantList model.participants,
+        button [onClick (Step JiraReview)] [text "proceed"]
+    ]
 
 participantInput : Model -> Html Msg
 participantInput model =
@@ -38,7 +33,3 @@ participantInput model =
             onInput Typing
         ]
     in input attributes []
-
-renderParticipant : Participant -> Html Msg
-renderParticipant participant =
-    li [css [fontSize (em 1.5)]] [text participant.name]

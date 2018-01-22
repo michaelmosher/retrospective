@@ -1,12 +1,25 @@
-module Retrospective.Views.Shared exposing (ideaSection, onEnter)
+module Retrospective.Views.Shared exposing (ideaSection, onEnter, participantList)
 
 import Css exposing (..)
-import Html.Styled exposing (Html, section, ul)
+import Html.Styled exposing (Html, li, section, text, ul)
 import Html.Styled.Attributes exposing (css)
 import Html.Styled.Events exposing (on)
 import Json.Decode as Json
 
 import Retrospective.Model exposing (..)
+
+participantList : List(Participant) -> Html Msg
+participantList participants =
+    let listStyles = [
+            textAlign left,
+            width (px 300),
+            margin2 (px 10) auto
+        ]
+    in List.map renderParticipant participants |> ul [css listStyles]
+
+renderParticipant : Participant -> Html Msg
+renderParticipant participant =
+    li [css [fontSize (em 1.5)]] [text participant.name]
 
 ideaSection : (Idea -> Html Msg) -> Model -> Html Msg
 ideaSection renderFn model =

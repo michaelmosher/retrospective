@@ -1,11 +1,11 @@
 module Retrospective.Views.Report exposing (view)
 
 import Css exposing (..)
-import Html.Styled exposing (Html, article, li, text, textarea)
+import Html.Styled exposing (Html, article, h1, li, text, textarea, ul)
 import Html.Styled.Attributes exposing (css, placeholder)
 
 import Retrospective.Model exposing (..)
-import Retrospective.Views.Shared exposing (ideaSection)
+import Retrospective.Views.Shared exposing (ideaSection, participantList)
 
 view : Model -> Html Msg
 view model =
@@ -14,6 +14,8 @@ view model =
         topScores = List.take 3 scores
         renderIdea = renderIdea_ topScores
     in article [] [
+        h1 [] [text "Retro Participants"],
+        participantList model.participants,
         ideaSection renderIdea { model | ideas = sorted },
         textarea [
             css [fontSize (em 1.5), minWidth (px 636), minHeight (px 200)],

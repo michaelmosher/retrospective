@@ -14589,8 +14589,7 @@ var _user$project$Retrospective_Views_Shared$ideaSection = F2(
 				},
 				kinds));
 	});
-
-var _user$project$Retrospective_Views_Beginning$renderParticipant = function (participant) {
+var _user$project$Retrospective_Views_Shared$renderParticipant = function (participant) {
 	return A2(
 		_rtfeldman$elm_css$Html_Styled$li,
 		{
@@ -14610,6 +14609,34 @@ var _user$project$Retrospective_Views_Beginning$renderParticipant = function (pa
 			_1: {ctor: '[]'}
 		});
 };
+var _user$project$Retrospective_Views_Shared$participantList = function (participants) {
+	var listStyles = {
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Css$textAlign(_rtfeldman$elm_css$Css$left),
+		_1: {
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Css$width(
+				_rtfeldman$elm_css$Css$px(300)),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_rtfeldman$elm_css$Css$margin2,
+					_rtfeldman$elm_css$Css$px(10),
+					_rtfeldman$elm_css$Css$auto),
+				_1: {ctor: '[]'}
+			}
+		}
+	};
+	return A2(
+		_rtfeldman$elm_css$Html_Styled$ul,
+		{
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(listStyles),
+			_1: {ctor: '[]'}
+		},
+		A2(_elm_lang$core$List$map, _user$project$Retrospective_Views_Shared$renderParticipant, participants));
+};
+
 var _user$project$Retrospective_Views_Beginning$participantInput = function (model) {
 	var styles = {
 		ctor: '::',
@@ -14660,23 +14687,6 @@ var _user$project$Retrospective_Views_Beginning$participantInput = function (mod
 		{ctor: '[]'});
 };
 var _user$project$Retrospective_Views_Beginning$view = function (model) {
-	var listStyles = {
-		ctor: '::',
-		_0: _rtfeldman$elm_css$Css$textAlign(_rtfeldman$elm_css$Css$left),
-		_1: {
-			ctor: '::',
-			_0: _rtfeldman$elm_css$Css$width(
-				_rtfeldman$elm_css$Css$px(300)),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_rtfeldman$elm_css$Css$margin2,
-					_rtfeldman$elm_css$Css$px(10),
-					_rtfeldman$elm_css$Css$auto),
-				_1: {ctor: '[]'}
-			}
-		}
-	};
 	return A2(
 		_rtfeldman$elm_css$Html_Styled$article,
 		{ctor: '[]'},
@@ -14685,14 +14695,7 @@ var _user$project$Retrospective_Views_Beginning$view = function (model) {
 			_0: _user$project$Retrospective_Views_Beginning$participantInput(model),
 			_1: {
 				ctor: '::',
-				_0: A2(
-					_rtfeldman$elm_css$Html_Styled$ul,
-					{
-						ctor: '::',
-						_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(listStyles),
-						_1: {ctor: '[]'}
-					},
-					A2(_elm_lang$core$List$map, _user$project$Retrospective_Views_Beginning$renderParticipant, model.participants)),
+				_0: _user$project$Retrospective_Views_Shared$participantList(model.participants),
 				_1: {
 					ctor: '::',
 					_0: A2(
@@ -15055,42 +15058,57 @@ var _user$project$Retrospective_Views_Report$view = function (model) {
 		{
 			ctor: '::',
 			_0: A2(
-				_user$project$Retrospective_Views_Shared$ideaSection,
-				renderIdea,
-				_elm_lang$core$Native_Utils.update(
-					model,
-					{ideas: sorted})),
+				_rtfeldman$elm_css$Html_Styled$h1,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _rtfeldman$elm_css$Html_Styled$text('Retro Participants'),
+					_1: {ctor: '[]'}
+				}),
 			_1: {
 				ctor: '::',
-				_0: A2(
-					_rtfeldman$elm_css$Html_Styled$textarea,
-					{
+				_0: _user$project$Retrospective_Views_Shared$participantList(model.participants),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_user$project$Retrospective_Views_Shared$ideaSection,
+						renderIdea,
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{ideas: sorted})),
+					_1: {
 						ctor: '::',
-						_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+						_0: A2(
+							_rtfeldman$elm_css$Html_Styled$textarea,
 							{
 								ctor: '::',
-								_0: _rtfeldman$elm_css$Css$fontSize(
-									_rtfeldman$elm_css$Css$em(1.5)),
+								_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+									{
+										ctor: '::',
+										_0: _rtfeldman$elm_css$Css$fontSize(
+											_rtfeldman$elm_css$Css$em(1.5)),
+										_1: {
+											ctor: '::',
+											_0: _rtfeldman$elm_css$Css$minWidth(
+												_rtfeldman$elm_css$Css$px(636)),
+											_1: {
+												ctor: '::',
+												_0: _rtfeldman$elm_css$Css$minHeight(
+													_rtfeldman$elm_css$Css$px(200)),
+												_1: {ctor: '[]'}
+											}
+										}
+									}),
 								_1: {
 									ctor: '::',
-									_0: _rtfeldman$elm_css$Css$minWidth(
-										_rtfeldman$elm_css$Css$px(636)),
-									_1: {
-										ctor: '::',
-										_0: _rtfeldman$elm_css$Css$minHeight(
-											_rtfeldman$elm_css$Css$px(200)),
-										_1: {ctor: '[]'}
-									}
+									_0: _rtfeldman$elm_css$Html_Styled_Attributes$placeholder('Use this area to record action items'),
+									_1: {ctor: '[]'}
 								}
-							}),
-						_1: {
-							ctor: '::',
-							_0: _rtfeldman$elm_css$Html_Styled_Attributes$placeholder('Use this area to record action items'),
-							_1: {ctor: '[]'}
-						}
-					},
-					{ctor: '[]'}),
-				_1: {ctor: '[]'}
+							},
+							{ctor: '[]'}),
+						_1: {ctor: '[]'}
+					}
+				}
 			}
 		});
 };
