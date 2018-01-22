@@ -26,22 +26,7 @@ type alias Model = {
 
 model : Model
 model =
-    let dummyParticipants = [
-        Participant "Michael" 3 False,
-        Participant "Laura" 3 False
-    ]
-        dummyIdeas = [
-            Idea "Defer “unknowns” and features no one can explain to us." Start 5 0,
-            Idea "Have a postmortem to discuss tech choices." Start 1 0,
-            Idea "Define app UI style guide" Start 0 0,
-            Idea "Look into On-Premise monitoring" Start 1 0,
-            Idea "Meeting Overload" Stop 2 0,
-            Idea "Fun new projects, and variety" Continue 1 0,
-            Idea "Learn Akka/Play Stack" Continue 1 0,
-            Idea "Test on various browsers" Continue 1 0
-        ]
-    in
-        Model Beginning Start (Idea "" Start 0 0) dummyIdeas "" dummyParticipants
+    Model Beginning Start (Idea "" Start 0 0) [] "" []
 
 type Msg =
     Typing String

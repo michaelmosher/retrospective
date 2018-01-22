@@ -14205,58 +14205,14 @@ var _user$project$Retrospective_Model$Beginning = {ctor: 'Beginning'};
 var _user$project$Retrospective_Model$Continue = {ctor: 'Continue'};
 var _user$project$Retrospective_Model$Stop = {ctor: 'Stop'};
 var _user$project$Retrospective_Model$Start = {ctor: 'Start'};
-var _user$project$Retrospective_Model$model = function () {
-	var dummyIdeas = {
-		ctor: '::',
-		_0: A4(_user$project$Retrospective_Model$Idea, 'Defer “unknowns” and features no one can explain to us.', _user$project$Retrospective_Model$Start, 5, 0),
-		_1: {
-			ctor: '::',
-			_0: A4(_user$project$Retrospective_Model$Idea, 'Have a postmortem to discuss tech choices.', _user$project$Retrospective_Model$Start, 1, 0),
-			_1: {
-				ctor: '::',
-				_0: A4(_user$project$Retrospective_Model$Idea, 'Define app UI style guide', _user$project$Retrospective_Model$Start, 0, 0),
-				_1: {
-					ctor: '::',
-					_0: A4(_user$project$Retrospective_Model$Idea, 'Look into On-Premise monitoring', _user$project$Retrospective_Model$Start, 1, 0),
-					_1: {
-						ctor: '::',
-						_0: A4(_user$project$Retrospective_Model$Idea, 'Meeting Overload', _user$project$Retrospective_Model$Stop, 2, 0),
-						_1: {
-							ctor: '::',
-							_0: A4(_user$project$Retrospective_Model$Idea, 'Fun new projects, and variety', _user$project$Retrospective_Model$Continue, 1, 0),
-							_1: {
-								ctor: '::',
-								_0: A4(_user$project$Retrospective_Model$Idea, 'Learn Akka/Play Stack', _user$project$Retrospective_Model$Continue, 1, 0),
-								_1: {
-									ctor: '::',
-									_0: A4(_user$project$Retrospective_Model$Idea, 'Test on various browsers', _user$project$Retrospective_Model$Continue, 1, 0),
-									_1: {ctor: '[]'}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	};
-	var dummyParticipants = {
-		ctor: '::',
-		_0: A3(_user$project$Retrospective_Model$Participant, 'Michael', 3, false),
-		_1: {
-			ctor: '::',
-			_0: A3(_user$project$Retrospective_Model$Participant, 'Laura', 3, false),
-			_1: {ctor: '[]'}
-		}
-	};
-	return A6(
-		_user$project$Retrospective_Model$Model,
-		_user$project$Retrospective_Model$Beginning,
-		_user$project$Retrospective_Model$Start,
-		A4(_user$project$Retrospective_Model$Idea, '', _user$project$Retrospective_Model$Start, 0, 0),
-		dummyIdeas,
-		'',
-		dummyParticipants);
-}();
+var _user$project$Retrospective_Model$model = A6(
+	_user$project$Retrospective_Model$Model,
+	_user$project$Retrospective_Model$Beginning,
+	_user$project$Retrospective_Model$Start,
+	A4(_user$project$Retrospective_Model$Idea, '', _user$project$Retrospective_Model$Start, 0, 0),
+	{ctor: '[]'},
+	'',
+	{ctor: '[]'});
 var _user$project$Retrospective_Model$NoOp = {ctor: 'NoOp'};
 var _user$project$Retrospective_Model$SubmitVotes = function (a) {
 	return {ctor: 'SubmitVotes', _0: a};
