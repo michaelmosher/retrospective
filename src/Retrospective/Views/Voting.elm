@@ -11,22 +11,47 @@ import Retrospective.Views.Shared exposing (ideaSection)
 
 view : Model -> Html Msg
 view model =
+    let votersRemaining = List.filter (\p -> not p.hasVoted) model.participants
+    in case List.head votersRemaining of
+        Nothing -> noVoterView model
+        Just p  -> voterView model p
+
+voterView : Model -> Participant -> Html Msg
+voterView model p =
     article [] [
-        span [] [text "Click ideas below to vote"],
-        votesBox model.votesRemaining,
-        ideaSection renderIdea model,
-        submitButton
+        span [] [p.name ++ ": Please place your votes below" |> text],
+        votesBox p.votesRemaining,
+        ideaSection (renderVotableIdea p) model,
+        submitButton p
     ]
 
-submitButton : Html Msg
-submitButton =
-    button [onClick (Step Report)] [text "Submit Votes"]
+noVoterView : Model -> Html Msg
+noVoterView model =
+    article [] [
+        span [] [text "Everyone has voted. Click proceed to see results."],
+        ideaSection renderFixedIdea model,
+        proceedButton
+    ]
 
-renderIdea : Idea -> Html Msg
-renderIdea i =
+submitButton : Participant -> Html Msg
+submitButton p =
+    button [onClick (SubmitVotes p)] [text "Submit Votes"]
+
+proceedButton : Html Msg
+proceedButton =
+    button [onClick (Step Report)] [text "Proceed"]
+
+renderVotableIdea : Participant -> Idea -> Html Msg
+renderVotableIdea p i =
     div [] [
-        li [onClick (Upvote i)] [i.note |> text],
-        div [css [displayFlex, minHeight (px 45)]] (votes (Downvote i) i.votes)
+        li [onClick (Upvote p i)] [i.note |> text],
+        div [css [displayFlex, minHeight (px 45)]] (votes (Downvote p i) i.votes)
+    ]
+
+renderFixedIdea : Idea -> Html Msg
+renderFixedIdea i =
+    div [] [
+        li [] [i.note |> text]
     ]
 
 votesBox : Int -> Html Msg

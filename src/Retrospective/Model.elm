@@ -5,6 +5,7 @@ type Kind = Start | Stop | Continue
 
 type alias Participant = {
     name : String,
+    votesRemaining: Int,
     hasVoted : Bool
 }
 type alias Idea = {
@@ -19,7 +20,6 @@ type alias Model = {
     activeKind : Kind,
     wipIdea : Idea,
     ideas : List(Idea),
-    votesRemaining : Int,
     wipParticipant : String,
     participants : List(Participant)
 }
@@ -27,7 +27,8 @@ type alias Model = {
 model : Model
 model =
     let dummyParticipants = [
-        Participant "Michael" False
+        Participant "Michael" 3 False,
+        Participant "Laura" 3 False
     ]
         dummyIdeas = [
             Idea "Defer “unknowns” and features no one can explain to us." Start 5 0,
@@ -40,7 +41,7 @@ model =
             Idea "Test on various browsers" Continue 1 0
         ]
     in
-        Model Beginning Start (Idea "" Start 0 0) dummyIdeas 3 "" dummyParticipants
+        Model Beginning Start (Idea "" Start 0 0) dummyIdeas "" dummyParticipants
 
 type Msg =
     Typing String
@@ -48,7 +49,8 @@ type Msg =
     | Step Stage
     | AddIdea Idea
     | EditIdea Idea
-    | Upvote Idea
-    | Downvote Idea
+    | Upvote Participant Idea
+    | Downvote Participant Idea
     | AddParticipant String
+    | SubmitVotes Participant
     | NoOp
