@@ -76,7 +76,7 @@ ideaTab kind =
 
 votingButton : Html Msg
 votingButton =
-    button [onClick (Step Voting)] [text "Start Voting"]
+    button [style [("fontSize", "1.1em")], onClick (Step Voting)] [text "Start Voting"]
 
 renderIdea : Idea -> Html Msg
 renderIdea i =

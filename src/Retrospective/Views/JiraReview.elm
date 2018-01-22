@@ -17,7 +17,7 @@ view _ =
     in article [] [
         h1 [] [text "Jira Review"],
         p [css pStyles] reviewSteps,
-        button [onClick (Step Listing)] [text "proceed"]
+        button [css [fontSize (em 1.1)], onClick (Step Listing)] [text "proceed"]
     ]
 
 reviewSteps : List(Html Msg)

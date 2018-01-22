@@ -2,7 +2,7 @@ module Retrospective.Views.Voting exposing (view)
 
 import Char
 import Css exposing (..)
-import Html.Styled exposing (Html, article, button, div, li, section, span, text)
+import Html.Styled exposing (Html, article, button, div, h1, li, section, span, text)
 import Html.Styled.Attributes exposing (css, style)
 import Html.Styled.Events exposing (onClick)
 
@@ -19,7 +19,8 @@ view model =
 voterView : Model -> Participant -> Html Msg
 voterView model p =
     article [] [
-        span [] [p.name ++ ": Please place your votes below" |> text],
+        h1 [] [text p.name],
+        span [] [text "Please place your votes below"],
         votesBox p.votesRemaining,
         ideaSection (renderVotableIdea p) model,
         submitButton p
@@ -35,17 +36,17 @@ noVoterView model =
 
 submitButton : Participant -> Html Msg
 submitButton p =
-    button [onClick (SubmitVotes p)] [text "Submit Votes"]
+    button [css [fontSize (em 1.1)], onClick (SubmitVotes p)] [text "Submit Votes"]
 
 proceedButton : Html Msg
 proceedButton =
-    button [onClick (Step Report)] [text "Proceed"]
+    button [css [fontSize (em 1.1)], onClick (Step Report)] [text "Proceed"]
 
 renderVotableIdea : Participant -> Idea -> Html Msg
 renderVotableIdea p i =
     div [] [
-        li [onClick (Upvote p i)] [i.note |> text],
-        div [css [displayFlex, minHeight (px 45)]] (votes (Downvote p i) i.votes)
+        li [css [margin (px 5)], onClick (Upvote p i)] [i.note |> text],
+        div [css [displayFlex, minHeight (px 35)]] (votes (Downvote p i) i.votes)
     ]
 
 renderFixedIdea : Idea -> Html Msg

@@ -14,7 +14,7 @@ view model =
     article [] [
         participantInput model,
         participantList model.participants,
-        button [onClick (Step JiraReview)] [text "proceed"]
+        button [css [fontSize (em 1.1)], onClick (Step JiraReview)] [text "proceed"]
     ]
 
 participantInput : Model -> Html Msg

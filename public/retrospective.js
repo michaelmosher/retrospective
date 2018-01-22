@@ -14702,9 +14702,19 @@ var _user$project$Retrospective_Views_Beginning$view = function (model) {
 						_rtfeldman$elm_css$Html_Styled$button,
 						{
 							ctor: '::',
-							_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
-								_user$project$Retrospective_Model$Step(_user$project$Retrospective_Model$JiraReview)),
-							_1: {ctor: '[]'}
+							_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+								{
+									ctor: '::',
+									_0: _rtfeldman$elm_css$Css$fontSize(
+										_rtfeldman$elm_css$Css$em(1.1)),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
+									_user$project$Retrospective_Model$Step(_user$project$Retrospective_Model$JiraReview)),
+								_1: {ctor: '[]'}
+							}
 						},
 						{
 							ctor: '::',
@@ -14770,9 +14780,19 @@ var _user$project$Retrospective_Views_JiraReview$view = function (_p0) {
 						_rtfeldman$elm_css$Html_Styled$button,
 						{
 							ctor: '::',
-							_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
-								_user$project$Retrospective_Model$Step(_user$project$Retrospective_Model$Listing)),
-							_1: {ctor: '[]'}
+							_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+								{
+									ctor: '::',
+									_0: _rtfeldman$elm_css$Css$fontSize(
+										_rtfeldman$elm_css$Css$em(1.1)),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
+									_user$project$Retrospective_Model$Step(_user$project$Retrospective_Model$Listing)),
+								_1: {ctor: '[]'}
+							}
 						},
 						{
 							ctor: '::',
@@ -14815,9 +14835,18 @@ var _user$project$Retrospective_Views_Listing$votingButton = A2(
 	_rtfeldman$elm_css$Html_Styled$button,
 	{
 		ctor: '::',
-		_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
-			_user$project$Retrospective_Model$Step(_user$project$Retrospective_Model$Voting)),
-		_1: {ctor: '[]'}
+		_0: _rtfeldman$elm_css$Html_Styled_Attributes$style(
+			{
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'fontSize', _1: '1.1em'},
+				_1: {ctor: '[]'}
+			}),
+		_1: {
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
+				_user$project$Retrospective_Model$Step(_user$project$Retrospective_Model$Voting)),
+			_1: {ctor: '[]'}
+		}
 	},
 	{
 		ctor: '::',
@@ -15238,9 +15267,19 @@ var _user$project$Retrospective_Views_Voting$renderVotableIdea = F2(
 					_rtfeldman$elm_css$Html_Styled$li,
 					{
 						ctor: '::',
-						_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
-							A2(_user$project$Retrospective_Model$Upvote, p, i)),
-						_1: {ctor: '[]'}
+						_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+							{
+								ctor: '::',
+								_0: _rtfeldman$elm_css$Css$margin(
+									_rtfeldman$elm_css$Css$px(5)),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
+								A2(_user$project$Retrospective_Model$Upvote, p, i)),
+							_1: {ctor: '[]'}
+						}
 					},
 					{
 						ctor: '::',
@@ -15260,7 +15299,7 @@ var _user$project$Retrospective_Views_Voting$renderVotableIdea = F2(
 									_1: {
 										ctor: '::',
 										_0: _rtfeldman$elm_css$Css$minHeight(
-											_rtfeldman$elm_css$Css$px(45)),
+											_rtfeldman$elm_css$Css$px(35)),
 										_1: {ctor: '[]'}
 									}
 								}),
@@ -15278,9 +15317,19 @@ var _user$project$Retrospective_Views_Voting$proceedButton = A2(
 	_rtfeldman$elm_css$Html_Styled$button,
 	{
 		ctor: '::',
-		_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
-			_user$project$Retrospective_Model$Step(_user$project$Retrospective_Model$Report)),
-		_1: {ctor: '[]'}
+		_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+			{
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Css$fontSize(
+					_rtfeldman$elm_css$Css$em(1.1)),
+				_1: {ctor: '[]'}
+			}),
+		_1: {
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
+				_user$project$Retrospective_Model$Step(_user$project$Retrospective_Model$Report)),
+			_1: {ctor: '[]'}
+		}
 	},
 	{
 		ctor: '::',
@@ -15292,9 +15341,19 @@ var _user$project$Retrospective_Views_Voting$submitButton = function (p) {
 		_rtfeldman$elm_css$Html_Styled$button,
 		{
 			ctor: '::',
-			_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
-				_user$project$Retrospective_Model$SubmitVotes(p)),
-			_1: {ctor: '[]'}
+			_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+				{
+					ctor: '::',
+					_0: _rtfeldman$elm_css$Css$fontSize(
+						_rtfeldman$elm_css$Css$em(1.1)),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
+					_user$project$Retrospective_Model$SubmitVotes(p)),
+				_1: {ctor: '[]'}
+			}
 		},
 		{
 			ctor: '::',
@@ -15335,27 +15394,37 @@ var _user$project$Retrospective_Views_Voting$voterView = F2(
 			{
 				ctor: '::',
 				_0: A2(
-					_rtfeldman$elm_css$Html_Styled$span,
+					_rtfeldman$elm_css$Html_Styled$h1,
 					{ctor: '[]'},
 					{
 						ctor: '::',
-						_0: _rtfeldman$elm_css$Html_Styled$text(
-							A2(_elm_lang$core$Basics_ops['++'], p.name, ': Please place your votes below')),
+						_0: _rtfeldman$elm_css$Html_Styled$text(p.name),
 						_1: {ctor: '[]'}
 					}),
 				_1: {
 					ctor: '::',
-					_0: _user$project$Retrospective_Views_Voting$votesBox(p.votesRemaining),
+					_0: A2(
+						_rtfeldman$elm_css$Html_Styled$span,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Html_Styled$text('Please place your votes below'),
+							_1: {ctor: '[]'}
+						}),
 					_1: {
 						ctor: '::',
-						_0: A2(
-							_user$project$Retrospective_Views_Shared$ideaSection,
-							_user$project$Retrospective_Views_Voting$renderVotableIdea(p),
-							model),
+						_0: _user$project$Retrospective_Views_Voting$votesBox(p.votesRemaining),
 						_1: {
 							ctor: '::',
-							_0: _user$project$Retrospective_Views_Voting$submitButton(p),
-							_1: {ctor: '[]'}
+							_0: A2(
+								_user$project$Retrospective_Views_Shared$ideaSection,
+								_user$project$Retrospective_Views_Voting$renderVotableIdea(p),
+								model),
+							_1: {
+								ctor: '::',
+								_0: _user$project$Retrospective_Views_Voting$submitButton(p),
+								_1: {ctor: '[]'}
+							}
 						}
 					}
 				}
